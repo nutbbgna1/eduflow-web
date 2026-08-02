@@ -158,7 +158,66 @@ if ($pdo) {
         if (!$col_check('student_grades', 'submission_text')) $pdo->exec("ALTER TABLE student_grades ADD COLUMN submission_text TEXT NULL");
         if (!$col_check('student_grades', 'submission_file_url')) $pdo->exec("ALTER TABLE student_grades ADD COLUMN submission_file_url VARCHAR(255) NULL");
 
-        // 4. ตรวจสอบและเพิ่มคอลัมน์อื่นๆ ที่อาจตกหล่นจากฝั่ง Admin
+        // 4. ตรวจสอบและสร้างตารางอื่นๆ (Admin Modules)
+        $pdo->exec("CREATE TABLE IF NOT EXISTS categories (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(100) NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )");
+
+        $pdo->exec("CREATE TABLE IF NOT EXISTS payments (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            student_id INT NOT NULL,
+            subject_id INT NOT NULL,
+            amount DECIMAL(10,2) NOT NULL DEFAULT 0,
+            description VARCHAR(255),
+            due_date DATE,
+            paid_date DATE NULL,
+            status ENUM('unpaid','pending_confirm','paid') DEFAULT 'unpaid',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+            FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE
+        )");
+
+        $pdo->exec("CREATE TABLE IF NOT EXISTS teaching_logs (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            schedule_id INT NOT NULL,
+            teacher_id INT NOT NULL,
+            log_date DATE NOT NULL,
+            topic VARCHAR(255) NOT NULL,
+            notes TEXT,
+            status ENUM('completed', 'cancelled', 'makeup') DEFAULT 'completed',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (schedule_id) REFERENCES schedules(id) ON DELETE CASCADE,
+            FOREIGN KEY (teacher_id) REFERENCES users(id) ON DELETE CASCADE
+        )");
+
+        $pdo->exec("CREATE TABLE IF NOT EXISTS teaching_log_students (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            teaching_log_id INT NOT NULL,
+            student_id INT NOT NULL,
+            source ENUM('rfid', 'manual') DEFAULT 'manual',
+            FOREIGN KEY (teaching_log_id) REFERENCES teaching_logs(id) ON DELETE CASCADE,
+            FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
+        )");
+
+        $pdo->exec("CREATE TABLE IF NOT EXISTS leave_requests (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            requester_id INT NOT NULL,
+            substitute_id INT NULL,
+            schedule_id INT NOT NULL,
+            leave_date DATE NOT NULL,
+            leave_type ENUM('sick', 'personal', 'vacation') NOT NULL,
+            reason TEXT,
+            status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
+            substitute_status ENUM('pending', 'accepted', 'rejected') DEFAULT 'pending',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (requester_id) REFERENCES users(id) ON DELETE CASCADE,
+            FOREIGN KEY (substitute_id) REFERENCES users(id) ON DELETE CASCADE,
+            FOREIGN KEY (schedule_id) REFERENCES schedules(id) ON DELETE CASCADE
+        )");
+
+        // 5. ตรวจสอบและเพิ่มคอลัมน์อื่นๆ ที่อาจตกหล่น
         if (!$col_check('enrollments', 'status')) $pdo->exec("ALTER TABLE enrollments ADD COLUMN status ENUM('active', 'expired') DEFAULT 'active'");
         
         if (!$col_check('users', 'email'))       $pdo->exec("ALTER TABLE users ADD COLUMN email VARCHAR(150) NULL");
