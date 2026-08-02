@@ -118,17 +118,6 @@ if ($pdo) {
         // กำหนด Default Username ให้กับนักเรียนเดิมถ้ายังไม่มี
         $pdo->exec("UPDATE students SET username = CONCAT('S', LPAD(id, 3, '0')), password = '1234' WHERE username IS NULL OR username = ''");
 
-        // ตรวจสอบและสร้างบัญชีนักเรียน S001 สำหรับทดสอบ (กันพลาด)
-        $s001_exists = $pdo->query("SELECT COUNT(*) FROM students WHERE username = 'S001'")->fetchColumn();
-        if ($s001_exists == 0) {
-            try {
-                $pdo->exec("INSERT INTO students (student_code, first_name, last_name, username, password) VALUES ('STU-001', 'สมชาย', 'รักเรียน', 'S001', '1234')");
-            } catch (\Exception $e) {}
-        } else {
-            // ถัามีอยู่แล้ว รีเซ็ตรหัสผ่านให้เป็น 1234 เผื่อเปลี่ยนไป
-            $pdo->exec("UPDATE students SET password = '1234' WHERE username = 'S001'");
-        }
-        
         // รีเซ็ตรหัสผ่าน teacher1 ให้เป็น 1234 เผื่อเปลี่ยนไป
         $pdo->exec("UPDATE users SET password = '1234' WHERE username = 'teacher1'");
 
@@ -187,43 +176,6 @@ if ($pdo) {
 
         if (!$col_check('course_contents', 'order_num')) $pdo->exec("ALTER TABLE course_contents ADD COLUMN order_num INT DEFAULT 0");
         if (!$col_check('assignments', 'max_score')) $pdo->exec("ALTER TABLE assignments ADD COLUMN max_score INT DEFAULT 100");
-
-        // 5. MOCK DATA FOR TESTING (กันตารางว่างบนโฮสต์จริง)
-        $subject_exists = $pdo->query("SELECT COUNT(*) FROM subjects WHERE id = 1")->fetchColumn();
-        if ($subject_exists == 0) {
-            $pdo->exec("INSERT INTO subjects (id, code, name, description) VALUES (1, 'PHY101', 'ฟิสิกส์ ม.5', 'วิชาฟิสิกส์พื้นฐาน')");
-        }
-
-        $student1 = $pdo->query("SELECT id FROM students WHERE username = 'S001'")->fetchColumn();
-        if ($student1) {
-            $enroll_exists = $pdo->query("SELECT COUNT(*) FROM enrollments WHERE student_id = $student1 AND subject_id = 1")->fetchColumn();
-            if ($enroll_exists == 0) {
-                $pdo->exec("INSERT INTO enrollments (student_id, subject_id, status) VALUES ($student1, 1, 'active')");
-            }
-        }
-
-        $teacher1 = $pdo->query("SELECT id FROM users WHERE username = 'teacher1'")->fetchColumn();
-        if (!$teacher1) {
-            $pdo->exec("INSERT INTO users (username, password, first_name, last_name, role) VALUES ('teacher1', '1234', 'ดร. สมหญิง', 'รักเรียน', 'teacher')");
-            $teacher1 = $pdo->query("SELECT id FROM users WHERE username = 'teacher1'")->fetchColumn();
-        }
-
-        if ($teacher1) {
-            $schedule_exists = $pdo->query("SELECT COUNT(*) FROM schedules WHERE subject_id = 1 AND teacher_id = $teacher1")->fetchColumn();
-            if ($schedule_exists == 0) {
-                $pdo->exec("INSERT INTO schedules (teacher_id, subject_id, room, day_of_week, start_time, end_time) VALUES ($teacher1, 1, 'ห้อง 302', 'Thursday', '09:00:00', '10:30:00')");
-            }
-
-            $content_exists = $pdo->query("SELECT COUNT(*) FROM course_contents WHERE subject_id = 1")->fetchColumn();
-            if ($content_exists == 0) {
-                $pdo->exec("INSERT INTO course_contents (subject_id, teacher_id, title, content_type, file_url, order_num) VALUES (1, $teacher1, 'บทที่ 1: การเคลื่อนที่แนวตรง', 'video', 'https://www.youtube.com/watch?v=example', 1)");
-            }
-
-            $assign_exists = $pdo->query("SELECT COUNT(*) FROM assignments WHERE subject_id = 1")->fetchColumn();
-            if ($assign_exists == 0) {
-                $pdo->exec("INSERT INTO assignments (subject_id, teacher_id, title, description, due_date) VALUES (1, $teacher1, 'แบบฝึกหัดที่ 1 (ทดสอบ)', 'ให้นักเรียนทำแบบฝึกหัดแล้วส่งเป็นลิงก์ Google Drive หรือข้อความ', '2026-12-31 23:59:59')");
-            }
-        }
 
     } catch (\Exception $e) {
         // ปล่อยผ่านถ้าบางตารางมี Foreign Key ผูกอยู่แล้วไม่สามารถสร้างซ้ำได้
