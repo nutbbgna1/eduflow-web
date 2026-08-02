@@ -169,6 +169,24 @@ if ($pdo) {
         if (!$col_check('student_grades', 'submission_text')) $pdo->exec("ALTER TABLE student_grades ADD COLUMN submission_text TEXT NULL");
         if (!$col_check('student_grades', 'submission_file_url')) $pdo->exec("ALTER TABLE student_grades ADD COLUMN submission_file_url VARCHAR(255) NULL");
 
+        // 4. ตรวจสอบและเพิ่มคอลัมน์อื่นๆ ที่อาจตกหล่นจากฝั่ง Admin
+        if (!$col_check('enrollments', 'status')) $pdo->exec("ALTER TABLE enrollments ADD COLUMN status ENUM('active', 'expired') DEFAULT 'active'");
+        
+        if (!$col_check('users', 'email'))       $pdo->exec("ALTER TABLE users ADD COLUMN email VARCHAR(150) NULL");
+        if (!$col_check('users', 'phone'))       $pdo->exec("ALTER TABLE users ADD COLUMN phone VARCHAR(20) NULL");
+        if (!$col_check('users', 'hourly_rate')) $pdo->exec("ALTER TABLE users ADD COLUMN hourly_rate DECIMAL(10,2) DEFAULT 500.00");
+        if (!$col_check('users', 'status'))      $pdo->exec("ALTER TABLE users ADD COLUMN status ENUM('active','inactive','on_leave') DEFAULT 'active'");
+
+        if (!$col_check('students', 'grade'))     $pdo->exec("ALTER TABLE students ADD COLUMN grade VARCHAR(20) NULL");
+        if (!$col_check('students', 'program'))   $pdo->exec("ALTER TABLE students ADD COLUMN program VARCHAR(50) NULL");
+        if (!$col_check('students', 'status'))    $pdo->exec("ALTER TABLE students ADD COLUMN status ENUM('enrolled','at_risk','inactive') DEFAULT 'enrolled'");
+
+        if (!$col_check('subjects', 'category'))  $pdo->exec("ALTER TABLE subjects ADD COLUMN category VARCHAR(100) NULL");
+        if (!$col_check('subjects', 'category_id')) $pdo->exec("ALTER TABLE subjects ADD COLUMN category_id INT NULL");
+        if (!$col_check('subjects', 'subcategory_id')) $pdo->exec("ALTER TABLE subjects ADD COLUMN subcategory_id INT NULL");
+
+        if (!$col_check('course_contents', 'order_num')) $pdo->exec("ALTER TABLE course_contents ADD COLUMN order_num INT DEFAULT 0");
+
     } catch (\Exception $e) {
         // ปล่อยผ่านถ้าบางตารางมี Foreign Key ผูกอยู่แล้วไม่สามารถสร้างซ้ำได้
     }
