@@ -1821,7 +1821,7 @@ input, select, textarea { font-family: inherit; }
 }
 .calendar-header-row {
   display: grid;
-  grid-template-columns: 80px repeat(5, 1fr);
+  grid-template-columns: 80px repeat(7, 1fr);
   background: #F8FAFC;
   border-bottom: 1px solid var(--border);
 }
@@ -1839,7 +1839,7 @@ input, select, textarea { font-family: inherit; }
 .calendar-body {
   position: relative;
   display: grid;
-  grid-template-columns: 80px repeat(5, 1fr);
+  grid-template-columns: 80px repeat(7, 1fr);
 }
 .time-col {
   border-right: 1px solid var(--border);

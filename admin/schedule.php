@@ -95,6 +95,8 @@ $colors = ['blue', 'red', 'green', 'purple', 'orange', 'blue', 'red'];
                     <div class="cal-head-cell">Wednesday</div>
                     <div class="cal-head-cell">Thursday</div>
                     <div class="cal-head-cell">Friday</div>
+                    <div class="cal-head-cell">Saturday</div>
+                    <div class="cal-head-cell">Sunday</div>
                 </div>
                 
                 <div class="calendar-body">
@@ -108,6 +110,11 @@ $colors = ['blue', 'red', 'green', 'purple', 'orange', 'blue', 'red'];
                         <div class="time-slot">14:00</div>
                         <div class="time-slot">15:00</div>
                         <div class="time-slot">16:00</div>
+                        <div class="time-slot">17:00</div>
+                        <div class="time-slot">18:00</div>
+                        <div class="time-slot">19:00</div>
+                        <div class="time-slot">20:00</div>
+                        <div class="time-slot">21:00</div>
                     </div>
                     
                     <?php foreach($days as $idx => $day): ?>
