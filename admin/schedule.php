@@ -14,7 +14,7 @@ $schedules = $stmt->fetchAll();
 
 // Fetch teachers, subjects, and rooms for modal
 $teachers = $pdo->query("SELECT id, first_name, last_name FROM users WHERE role = 'teacher' OR role = 'admin'")->fetchAll();
-$subjects = $pdo->query("SELECT id, code, name FROM subjects WHERE is_onsite = 1 ORDER BY name")->fetchAll();
+$subjects = $pdo->query("SELECT id, code, name, is_online, is_onsite FROM subjects ORDER BY name")->fetchAll();
 $rooms = $pdo->query("SELECT id, name FROM rooms ORDER BY name")->fetchAll();
 
 $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
@@ -27,6 +27,25 @@ $colors = ['blue', 'red', 'green', 'purple', 'orange'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EduFlow Admin — Schedule</title>
     <link rel="stylesheet" href="css/admin.css">
+    <script>
+        function handleSubjectChange() {
+            const subjSelect = document.getElementById('subject_select');
+            const roomSelect = document.getElementById('room_select');
+            
+            const selectedOption = subjSelect.options[subjSelect.selectedIndex];
+            if (selectedOption && selectedOption.dataset.onsite === '0') {
+                // Online only course
+                roomSelect.value = 'Online';
+                roomSelect.disabled = true;
+            } else {
+                // Onsite or Hybrid course
+                roomSelect.disabled = false;
+                if (roomSelect.value === 'Online') {
+                    roomSelect.value = '';
+                }
+            }
+        }
+    </script>
     <style>
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
@@ -143,17 +162,20 @@ $colors = ['blue', 'red', 'green', 'purple', 'orange'];
                 </div>
                 <div class="form-group">
                     <label>Select Course</label>
-                    <select name="subject_id" required>
-                        <option value="">-- เลือกคอร์ส --</option>
+                    <select name="subject_id" id="subject_select" required onchange="handleSubjectChange()">
+                        <option value="">-- เลือกคอร์สเรียน --</option>
                         <?php foreach($subjects as $sub): ?>
-                            <option value="<?= $sub['id'] ?>"><?= htmlspecialchars($sub['code'].' - '.$sub['name']) ?></option>
+                            <option value="<?= $sub['id'] ?>" data-onsite="<?= $sub['is_onsite'] ? '1' : '0' ?>">
+                                <?= htmlspecialchars($sub['code'].' - '.$sub['name']) ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>Room</label>
-                    <select name="room" required>
+                    <select name="room" id="room_select" required>
                         <option value="">-- เลือกห้องเรียน --</option>
+                        <option value="Online" style="display:none;" id="online_room_option">Online</option>
                         <?php foreach($rooms as $r): ?>
                             <option value="<?= htmlspecialchars($r['name']) ?>"><?= htmlspecialchars($r['name']) ?></option>
                         <?php endforeach; ?>
