@@ -63,6 +63,54 @@ if ($pdo) {
     try {
         $col_check = fn($table, $col) => (bool)$pdo->query("SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = '$table' AND COLUMN_NAME = '$col'")->fetchColumn();
 
+        // 0. สร้างตารางหลักที่อาจจะหายไปบน Hostinger
+        $pdo->exec("CREATE TABLE IF NOT EXISTS users (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            username VARCHAR(50) NOT NULL,
+            password VARCHAR(255) NOT NULL,
+            first_name VARCHAR(100) NOT NULL,
+            last_name VARCHAR(100) NOT NULL,
+            role ENUM('teacher', 'admin', 'student') DEFAULT 'teacher',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )");
+
+        $pdo->exec("CREATE TABLE IF NOT EXISTS subjects (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            code VARCHAR(20) NOT NULL,
+            name VARCHAR(100) NOT NULL,
+            description TEXT
+        )");
+
+        $pdo->exec("CREATE TABLE IF NOT EXISTS students (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            student_code VARCHAR(20) NOT NULL,
+            first_name VARCHAR(100) NOT NULL,
+            last_name VARCHAR(100) NOT NULL,
+            rfid_tag VARCHAR(100) NULL,
+            username VARCHAR(50) NULL,
+            password VARCHAR(255) NULL
+        )");
+
+        $pdo->exec("CREATE TABLE IF NOT EXISTS enrollments (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            student_id INT NOT NULL,
+            subject_id INT NOT NULL,
+            FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+            FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE
+        )");
+
+        $pdo->exec("CREATE TABLE IF NOT EXISTS schedules (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            teacher_id INT NOT NULL,
+            subject_id INT NOT NULL,
+            room VARCHAR(50) NOT NULL,
+            day_of_week ENUM('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday') NOT NULL,
+            start_time TIME NOT NULL,
+            end_time TIME NOT NULL,
+            FOREIGN KEY (teacher_id) REFERENCES users(id) ON DELETE CASCADE,
+            FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE
+        )");
+
         // 1. ตรวจสอบและเพิ่มคอลัมน์ใน students
         if (!$col_check('students', 'username')) $pdo->exec("ALTER TABLE students ADD COLUMN username VARCHAR(50) NULL");
         if (!$col_check('students', 'password')) $pdo->exec("ALTER TABLE students ADD COLUMN password VARCHAR(255) NULL");
