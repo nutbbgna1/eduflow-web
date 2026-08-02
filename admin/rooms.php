@@ -99,7 +99,6 @@ $rooms = $stmt->fetchAll();
                             <tr>
                                 <th>ID</th>
                                 <th>ROOM NAME</th>
-                                <th>BUILDING</th>
                                 <th>CAPACITY</th>
                                 <th style="text-align:right;">ACTIONS</th>
                             </tr>
@@ -112,7 +111,6 @@ $rooms = $stmt->fetchAll();
                                     <span class="material-symbols-rounded" style="font-size:16px;vertical-align:middle;color:var(--primary);margin-right:6px;">meeting_room</span>
                                     <?= htmlspecialchars($room['name']) ?>
                                 </td>
-                                <td style="color:var(--text-muted);"><?= htmlspecialchars($room['building'] ?? '-') ?></td>
                                 <td>
                                     <?php if($room['capacity'] > 0): ?>
                                     <span style="background:var(--primary-light);color:var(--primary);padding:3px 10px;border-radius:100px;font-size:12px;font-weight:600;"><?= $room['capacity'] ?> คน</span>
@@ -128,7 +126,7 @@ $rooms = $stmt->fetchAll();
                             <?php endforeach; ?>
                             <?php if(empty($rooms)): ?>
                             <tr>
-                                <td colspan="5" style="text-align:center;padding:60px;color:var(--text-muted);">
+                                <td colspan="4" style="text-align:center;padding:60px;color:var(--text-muted);">
                                     <span class="material-symbols-rounded" style="font-size:48px;display:block;margin-bottom:12px;opacity:0.4;">meeting_room</span>
                                     ยังไม่มีห้องเรียน กด "Add Room" เพื่อเพิ่มห้องใหม่
                                 </td>
@@ -153,10 +151,6 @@ $rooms = $stmt->fetchAll();
                     <input type="text" name="name" id="room_name" placeholder="Room 401" required>
                 </div>
                 <div class="form-group">
-                    <label>อาคาร / ตึก</label>
-                    <input type="text" name="building" id="room_building" placeholder="Main Building">
-                </div>
-                <div class="form-group">
                     <label>ความจุ (จำนวนนักเรียนสูงสุด)</label>
                     <input type="number" name="capacity" id="room_capacity" min="0" placeholder="30">
                 </div>
@@ -173,7 +167,6 @@ $rooms = $stmt->fetchAll();
             document.getElementById('roomModalTitle').innerText = 'Add New Room';
             document.getElementById('room_id').value = '';
             document.getElementById('room_name').value = '';
-            document.getElementById('room_building').value = '';
             document.getElementById('room_capacity').value = '';
             document.getElementById('roomModal').classList.add('active');
         }
@@ -181,7 +174,6 @@ $rooms = $stmt->fetchAll();
             document.getElementById('roomModalTitle').innerText = 'Edit Room';
             document.getElementById('room_id').value = r.id;
             document.getElementById('room_name').value = r.name;
-            document.getElementById('room_building').value = r.building || '';
             document.getElementById('room_capacity').value = r.capacity || '';
             document.getElementById('roomModal').classList.add('active');
         }
