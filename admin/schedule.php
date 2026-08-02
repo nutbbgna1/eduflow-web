@@ -17,8 +17,8 @@ $teachers = $pdo->query("SELECT id, first_name, last_name FROM users WHERE role 
 $subjects = $pdo->query("SELECT id, code, name, is_online, is_onsite FROM subjects ORDER BY name")->fetchAll();
 $rooms = $pdo->query("SELECT id, name FROM rooms ORDER BY name")->fetchAll();
 
-$days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-$colors = ['blue', 'red', 'green', 'purple', 'orange'];
+$days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+$colors = ['blue', 'red', 'green', 'purple', 'orange', 'blue', 'red'];
 ?>
 <!DOCTYPE html>
 <html lang="th">
@@ -189,6 +189,8 @@ $colors = ['blue', 'red', 'green', 'purple', 'orange'];
                         <option value="Wednesday">Wednesday</option>
                         <option value="Thursday">Thursday</option>
                         <option value="Friday">Friday</option>
+                        <option value="Saturday">Saturday</option>
+                        <option value="Sunday">Sunday</option>
                     </select>
                 </div>
                 <div style="display:flex; gap:12px;">
