@@ -10,8 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // For this prototype, we will just use a mock URL or ignore it.
     $photo_url = 'uploads/mock_photo_' . time() . '.jpg'; 
 
-    $log_date = date('Y-m-d'); // '2023-08-24' for mock if needed, but we'll use actual date
-    $log_date = '2023-08-24'; // Hardcoding for consistency with dashboard
+    $log_date = date('Y-m-d');
     $checkin_time = date('Y-m-d H:i:s');
 
     try {

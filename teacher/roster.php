@@ -1,6 +1,6 @@
 <?php
 require_once '../config/db.php';
-$current_user_id = $_SESSION['user_id'] ?? 1;
+
 $subject_id = $_GET['subject_id'] ?? null;
 
 // Fetch subjects taught by this teacher

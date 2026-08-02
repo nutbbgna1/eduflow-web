@@ -1,6 +1,6 @@
 <?php
 require_once '../config/db.php';
-$current_user_id = $_SESSION['user_id'] ?? 1;
+
 
 // Fetch subjects taught by this teacher
 $stmt = $pdo->prepare("SELECT DISTINCT sub.id, sub.code, sub.name FROM schedules s JOIN subjects sub ON s.subject_id = sub.id WHERE s.teacher_id = ?");

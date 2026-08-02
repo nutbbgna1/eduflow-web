@@ -6,10 +6,9 @@ $stmt = $pdo->prepare("SELECT * FROM users WHERE id = :id");
 $stmt->execute(['id' => $current_user_id]);
 $teacher = $stmt->fetch();
 
-// Mock current day and time for testing
-$current_day = 'Thursday';
-$current_time = '09:45:00'; 
-$current_date = '2023-08-24';
+$current_day = date('l');
+$current_time = date('H:i:s');
+$current_date = date('Y-m-d');
 
 // Fetch schedules for today
 $stmt = $pdo->prepare("

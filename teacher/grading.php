@@ -1,6 +1,6 @@
 <?php
 require_once '../config/db.php';
-$current_user_id = $_SESSION['user_id'] ?? 1;
+
 $assignment_id = $_GET['id'] ?? null;
 
 if (!$assignment_id) {
