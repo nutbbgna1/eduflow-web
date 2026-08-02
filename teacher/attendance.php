@@ -352,66 +352,12 @@ $checkin_history = $today_checkins->fetchAll();
                     </div>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <!-- Example static rows when no data -->
-                    <div class="history-item">
-                        <div class="history-item-left">
-                            <div class="history-icon" style="background:var(--success-bg);color:var(--success);">
-                                <span class="material-symbols-rounded">login</span>
-                            </div>
-                            <div>
-                                <div class="history-title">ลงเวลาเข้า (ปกติ)</div>
-                                <div class="history-sub">วันนี้ • สถาบัน</div>
-                            </div>
-                        </div>
-                        <div class="history-time">07:20</div>
-                    </div>
-                    <div class="history-item">
-                        <div class="history-item-left">
-                            <div class="history-icon" style="background:var(--danger-bg);color:var(--danger);">
-                                <span class="material-symbols-rounded">logout</span>
-                            </div>
-                            <div>
-                                <div class="history-title">ลงเวลาออก</div>
-                                <div class="history-sub">เมื่อวาน • สถาบัน</div>
-                            </div>
-                        </div>
-                        <div class="history-time">16:45</div>
+                    <div class="history-item" style="justify-content:center; padding: 24px; color: var(--text-muted);">
+                        ไม่มีประวัติการลงเวลา
                     </div>
                 <?php endif; ?>
             </div>
 
-            <!-- Weekly Summary - 3 equal columns -->
-            <div class="section-header">
-                <span class="material-symbols-rounded text-primary">bar_chart</span>
-                <h3>สรุปรายสัปดาห์</h3>
-            </div>
-
-            <div class="card p-4 mb-6">
-                <div class="weekly-stats">
-                    <div class="weekly-stat-item">
-                        <div class="stat-number" style="color:var(--success);">5</div>
-                        <div class="stat-label">มาปกติ</div>
-                    </div>
-                    <div class="weekly-stat-item">
-                        <div class="stat-number" style="color:var(--danger);">0</div>
-                        <div class="stat-label">มาสาย</div>
-                    </div>
-                    <div class="weekly-stat-item">
-                        <div class="stat-number" style="color:var(--text-muted);">0</div>
-                        <div class="stat-label">ขาดงาน</div>
-                    </div>
-                </div>
-
-                <div class="progress-bar-wrapper">
-                    <div class="progress-bar-header">
-                        <span>ความตรงต่อเวลา</span>
-                        <strong>100%</strong>
-                    </div>
-                    <div class="progress-bar-track">
-                        <div class="progress-bar-fill" style="width:100%;"></div>
-                    </div>
-                </div>
-            </div>
 
             <?php endif; ?>
         </div>
