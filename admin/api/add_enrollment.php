@@ -5,6 +5,7 @@ require_login('admin');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $student_id = $_POST['student_id'] ?? '';
     $subject_id = $_POST['subject_id'] ?? '';
+    $return_to = $_POST['return_to'] ?? '';
 
     if ($student_id && $subject_id) {
         // Check if already enrolled
@@ -21,5 +22,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-header("Location: ../student_enrollments.php" . ($subject_id ? "?subject_id=$subject_id" : ""));
+if (!empty($return_to)) {
+    header("Location: ../" . ltrim($return_to, '/'));
+} else {
+    header("Location: ../student_enrollments.php" . ($subject_id ? "?subject_id=$subject_id" : ""));
+}
 exit;
