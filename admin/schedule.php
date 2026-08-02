@@ -12,9 +12,10 @@ $stmt = $pdo->query("
 ");
 $schedules = $stmt->fetchAll();
 
-// Fetch teachers and subjects for modal
+// Fetch teachers, subjects, and rooms for modal
 $teachers = $pdo->query("SELECT id, first_name, last_name FROM users WHERE role = 'teacher' OR role = 'admin'")->fetchAll();
 $subjects = $pdo->query("SELECT id, code, name FROM subjects ORDER BY name")->fetchAll();
+$rooms = $pdo->query("SELECT id, name FROM rooms ORDER BY name")->fetchAll();
 
 $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 $colors = ['blue', 'red', 'green', 'purple', 'orange'];
@@ -151,7 +152,12 @@ $colors = ['blue', 'red', 'green', 'purple', 'orange'];
                 </div>
                 <div class="form-group">
                     <label>Room</label>
-                    <input type="text" name="room" placeholder="e.g. Lab 101" required>
+                    <select name="room" required>
+                        <option value="">-- เลือกห้องเรียน --</option>
+                        <?php foreach($rooms as $r): ?>
+                            <option value="<?= htmlspecialchars($r['name']) ?>"><?= htmlspecialchars($r['name']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label>Day of Week</label>
