@@ -2,11 +2,14 @@
 // admin/index.php
 require_once 'includes/db.php';
 
-// Fetch Revenue (Mock calculation)
-$monthly_revenue = 124500;
-$teacher_costs = 45200;
-$active_students = 1248;
-$outstanding = 12400;
+// Fetch real stats
+$active_students = $pdo->query("SELECT COUNT(*) FROM students")->fetchColumn();
+$active_teachers = $pdo->query("SELECT COUNT(*) FROM users WHERE role = 'teacher'")->fetchColumn();
+$total_subjects = $pdo->query("SELECT COUNT(*) FROM subjects")->fetchColumn();
+$current_day = date('l');
+$today_classes = $pdo->prepare("SELECT COUNT(*) FROM schedules WHERE day_of_week = :day");
+$today_classes->execute(['day' => $current_day]);
+$today_classes = $today_classes->fetchColumn();
 
 // Pending Leaves
 $stmt = $pdo->query("
@@ -57,12 +60,11 @@ $pending_leaves = $stmt->fetchAll();
                 <div class="stat-card-d">
                     <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                         <div>
-                            <div class="sc-title">MONTHLY REVENUE</div>
-                            <div class="sc-value">$<?= number_format($monthly_revenue) ?></div>
-                            <div class="sc-trend up"><span class="material-symbols-rounded">trending_up</span> +12.5% vs last month</div>
+                            <div class="sc-title">นักเรียนทั้งหมด (คน)</div>
+                            <div class="sc-value"><?= number_format($active_students) ?></div>
                         </div>
                         <div style="width:40px; height:40px; border-radius:50%; background:#EFF6FF; display:flex; align-items:center; justify-content:center; color:#3B82F6;">
-                            <span class="material-symbols-rounded">trending_up</span>
+                            <span class="material-symbols-rounded">school</span>
                         </div>
                     </div>
                 </div>
@@ -70,12 +72,11 @@ $pending_leaves = $stmt->fetchAll();
                 <div class="stat-card-d">
                     <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                         <div>
-                            <div class="sc-title">EST. TEACHER COSTS</div>
-                            <div class="sc-value">$<?= number_format($teacher_costs) ?></div>
-                            <div class="sc-trend"><span class="material-symbols-rounded" style="font-size:16px;">arrow_right_alt</span> -2.1% vs last month</div>
+                            <div class="sc-title">ครูทั้งหมด (คน)</div>
+                            <div class="sc-value"><?= number_format($active_teachers) ?></div>
                         </div>
                         <div style="width:40px; height:40px; border-radius:50%; background:#F1F5F9; display:flex; align-items:center; justify-content:center; color:#64748B;">
-                            <span class="material-symbols-rounded">payments</span>
+                            <span class="material-symbols-rounded">badge</span>
                         </div>
                     </div>
                 </div>
@@ -83,77 +84,29 @@ $pending_leaves = $stmt->fetchAll();
                 <div class="stat-card-d">
                     <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                         <div>
-                            <div class="sc-title">ACTIVE STUDENTS</div>
-                            <div class="sc-value"><?= number_format($active_students) ?></div>
-                            <div class="sc-trend up"><span class="material-symbols-rounded">trending_up</span> +45 new this week</div>
+                            <div class="sc-title">วิชาเรียนทั้งหมด</div>
+                            <div class="sc-value"><?= number_format($total_subjects) ?></div>
                         </div>
                         <div style="width:40px; height:40px; border-radius:50%; background:#EFF6FF; display:flex; align-items:center; justify-content:center; color:#3B82F6;">
-                            <span class="material-symbols-rounded">groups</span>
+                            <span class="material-symbols-rounded">menu_book</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="stat-card-d" style="border-top: 4px solid #F59E0B;">
+                <div class="stat-card-d" style="border-top: 4px solid #10B981;">
                     <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                         <div>
-                            <div class="sc-title">OUTSTANDING</div>
-                            <div class="sc-value">$<?= number_format($outstanding) ?></div>
-                            <div class="sc-trend down"><span class="material-symbols-rounded">trending_up</span> +8.4% needs attention</div>
+                            <div class="sc-title">คาบเรียนวันนี้</div>
+                            <div class="sc-value"><?= number_format($today_classes) ?></div>
                         </div>
-                        <div style="width:40px; height:40px; border-radius:50%; background:#FEF3C7; display:flex; align-items:center; justify-content:center; color:#D97706;">
-                            <span class="material-symbols-rounded">error</span>
+                        <div style="width:40px; height:40px; border-radius:50%; background:#D1FAE5; display:flex; align-items:center; justify-content:center; color:#059669;">
+                            <span class="material-symbols-rounded">event</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Middle Row -->
-            <div class="dash-middle-row">
-                <div class="panel-d">
-                    <div class="panel-d-title">
-                        Student Distribution by Subject
-                        <span class="material-symbols-rounded" style="color:#94A3B8; cursor:pointer;">more_horiz</span>
-                    </div>
-                    <!-- Mock Bar Chart -->
-                    <div style="height: 250px; display:flex; align-items:flex-end; gap:20px; padding-top:20px; border-left:1px solid #E2E8F0; border-bottom:1px solid #E2E8F0; position:relative;">
-                        <div style="flex:1; background:#1D4ED8; height:75%; border-radius:4px 4px 0 0;"></div>
-                        <div style="flex:1; background:#BFDBFE; height:55%; border-radius:4px 4px 0 0;"></div>
-                        <div style="flex:1; background:#E2E8F0; height:35%; border-radius:4px 4px 0 0;"></div>
-                        <div style="flex:1; background:#2563EB; height:85%; border-radius:4px 4px 0 0;"></div>
-                        <div style="flex:1; background:#E2E8F0; height:25%; border-radius:4px 4px 0 0;"></div>
-                    </div>
-                    <div style="display:flex; justify-content:space-between; margin-top:12px; color:#64748B; font-size:12px; padding:0 20px;">
-                        <span>Math</span>
-                        <span>Science</span>
-                        <span>English</span>
-                        <span>Physics</span>
-                        <span>Art</span>
-                    </div>
-                </div>
 
-                <div class="panel-d">
-                    <div class="panel-d-title">Monthly Attendance</div>
-                    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height: 180px;">
-                        <div style="width: 140px; height: 140px; border-radius: 50%; border: 16px solid #1D4ED8; border-right-color: #E2E8F0; display:flex; align-items:center; justify-content:center; transform: rotate(45deg);">
-                            <div style="transform: rotate(-45deg); text-align:center;">
-                                <div style="font-size:28px; font-weight:800; color:#0F172A;">85%</div>
-                                <div style="font-size:10px; font-weight:700; color:#64748B; letter-spacing:1px;">AVG RATE</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div style="display:flex; justify-content:space-around; border-top:1px solid #E2E8F0; padding-top:16px; margin-top:24px;">
-                        <div style="text-align:center;">
-                            <div style="font-size:12px; color:#64748B; margin-bottom:4px;">Present</div>
-                            <div style="font-size:18px; font-weight:700; color:#16A34A;">1,060</div>
-                        </div>
-                        <div style="width:1px; background:#E2E8F0;"></div>
-                        <div style="text-align:center;">
-                            <div style="font-size:12px; color:#64748B; margin-bottom:4px;">Absent</div>
-                            <div style="font-size:18px; font-weight:700; color:#D97706;">188</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!-- Bottom Row -->
             <div class="dash-bottom-row">
