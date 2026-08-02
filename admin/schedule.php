@@ -14,7 +14,7 @@ $schedules = $stmt->fetchAll();
 
 // Fetch teachers, subjects, and rooms for modal
 $teachers = $pdo->query("SELECT id, first_name, last_name FROM users WHERE role = 'teacher' OR role = 'admin'")->fetchAll();
-$subjects = $pdo->query("SELECT id, code, name FROM subjects ORDER BY name")->fetchAll();
+$subjects = $pdo->query("SELECT id, code, name FROM subjects WHERE is_onsite = 1 ORDER BY name")->fetchAll();
 $rooms = $pdo->query("SELECT id, name FROM rooms ORDER BY name")->fetchAll();
 
 $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];

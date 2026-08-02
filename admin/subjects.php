@@ -134,6 +134,7 @@ if ($cat_filter) {
                                 <th>ID</th>
                                 <th>CODE</th>
                                 <th>COURSE NAME</th>
+                                <th>TYPE (รูปแบบ)</th>
                                 <th>CATEGORY (หมวดหมู่)</th>
                                 <th>DESCRIPTION</th>
                                 <th style="text-align:right;">ACTIONS</th>
@@ -145,6 +146,16 @@ if ($cat_filter) {
                                 <td style="color:var(--text-muted);"><?= $sub['id'] ?></td>
                                 <td><span style="background:var(--primary-light);color:var(--primary);padding:4px 10px;border-radius:6px;font-weight:700;font-size:12px;"><?= htmlspecialchars($sub['code']) ?></span></td>
                                 <td style="font-weight:600;"><?= htmlspecialchars($sub['name']) ?></td>
+                                <td>
+                                    <?php 
+                                        $types = [];
+                                        if (!empty($sub['is_online'])) $types[] = 'Online';
+                                        if (!empty($sub['is_onsite'])) $types[] = 'Onsite';
+                                        $typeStr = implode(' & ', $types);
+                                        if (empty($typeStr)) $typeStr = '-';
+                                    ?>
+                                    <span style="background:#F3F4F6;color:#374151;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:600;"><?= $typeStr ?></span>
+                                </td>
                                 <td>
                                     <?php if(!empty($sub['category_name'])): ?>
                                         <span style="background:#F1F5F9;color:#475569;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:600;">
@@ -210,6 +221,17 @@ if ($cat_filter) {
                     </select>
                 </div>
                 <div class="form-group">
+                    <label>รูปแบบการเรียนการสอน (Course Type)</label>
+                    <div style="display:flex; gap:16px; margin-top:8px;">
+                        <label style="font-weight:normal; font-size:14px; display:flex; align-items:center; gap:6px;">
+                            <input type="checkbox" name="is_online" id="subject_is_online" value="1" style="width:auto; height:auto; margin:0;"> Online
+                        </label>
+                        <label style="font-weight:normal; font-size:14px; display:flex; align-items:center; gap:6px;">
+                            <input type="checkbox" name="is_onsite" id="subject_is_onsite" value="1" style="width:auto; height:auto; margin:0;"> Onsite
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label>คำอธิบาย (ไม่บังคับ)</label>
                     <textarea name="description" id="subject_desc" rows="3" placeholder="รายละเอียดคอร์ส..."></textarea>
                 </div>
@@ -262,6 +284,8 @@ if ($cat_filter) {
             document.getElementById('subject_category').value = '';
             document.getElementById('subcat_group').style.display = 'none';
             document.getElementById('subject_subcategory').innerHTML = '<option value="">- ไม่มี -</option>';
+            document.getElementById('subject_is_online').checked = false;
+            document.getElementById('subject_is_onsite').checked = true; // Default to onsite
             document.getElementById('subject_desc').value = '';
             document.getElementById('subjectModal').classList.add('active');
         }
@@ -271,6 +295,8 @@ if ($cat_filter) {
             document.getElementById('subject_code').value = s.code;
             document.getElementById('subject_name').value = s.name;
             document.getElementById('subject_category').value = s.category_id || '';
+            document.getElementById('subject_is_online').checked = s.is_online == 1;
+            document.getElementById('subject_is_onsite').checked = s.is_onsite == 1;
             document.getElementById('subject_desc').value = s.description || '';
             
             if (s.category_id) {
