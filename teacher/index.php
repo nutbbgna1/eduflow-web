@@ -10,6 +10,10 @@ $current_day = date('l');
 $current_time = date('H:i:s');
 $current_date = date('Y-m-d');
 
+$thai_days = ['Sunday' => 'อาทิตย์', 'Monday' => 'จันทร์', 'Tuesday' => 'อังคาร', 'Wednesday' => 'พุธ', 'Thursday' => 'พฤหัสบดี', 'Friday' => 'ศุกร์', 'Saturday' => 'เสาร์'];
+$thai_months = ['01'=>'ม.ค.', '02'=>'ก.พ.', '03'=>'มี.ค.', '04'=>'เม.ย.', '05'=>'พ.ค.', '06'=>'มิ.ย.', '07'=>'ก.ค.', '08'=>'ส.ค.', '09'=>'ก.ย.', '10'=>'ต.ค.', '11'=>'พ.ย.', '12'=>'ธ.ค.'];
+$display_date_thai = $thai_days[date('l')] . ', ' . date('j') . ' ' . $thai_months[date('m')] . ' ' . (date('Y') + 543);
+
 // Fetch schedules for today
 $stmt = $pdo->prepare("
     SELECT s.*, sub.name as subject_name, sub.code as subject_code
@@ -45,12 +49,11 @@ $completed_logs = $stmt->fetchAll(PDO::FETCH_COLUMN);
             <div class="profile-section">
                 <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop&q=80" alt="Profile" class="profile-avatar-large">
                 <h2 class="font-bold text-xl mb-1"><?= htmlspecialchars($teacher['first_name'] . ' ' . $teacher['last_name']) ?></h2>
-                <p class="text-sm text-secondary">ครูประจำชั้นมัธยมศึกษาปีที่ 5/2 • หมวดวิทยาศาสตร์</p>
                 
                 <div class="w-full flex flex-col gap-2 mt-6 p-4" style="background-color: var(--surface); border-radius: var(--border-radius-md); box-shadow: var(--shadow-sm);">
                     <div class="flex justify-between">
                         <span class="text-sm text-secondary">วันที่</span>
-                        <span class="text-sm font-semibold">พฤหัสบดี, 24 ส.ค. 2566</span>
+                        <span class="text-sm font-semibold"><?= $display_date_thai ?></span>
                     </div>
                     <div class="flex justify-between">
                         <span class="text-sm text-secondary">คาบสอนทั้งหมด</span>
