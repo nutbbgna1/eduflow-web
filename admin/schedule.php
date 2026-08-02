@@ -26,7 +26,7 @@ $colors = ['blue', 'red', 'green', 'purple', 'orange', 'blue', 'red'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EduFlow Admin — Schedule</title>
-    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/admin.css?v=2">
     <script>
         function handleSubjectChange() {
             const subjSelect = document.getElementById('subject_select');
