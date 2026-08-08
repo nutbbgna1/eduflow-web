@@ -19,6 +19,8 @@ CREATE TABLE IF NOT EXISTS subjects (
     id INT AUTO_INCREMENT PRIMARY KEY,
     code VARCHAR(20) NOT NULL,
     name VARCHAR(100) NOT NULL,
+    is_online TINYINT(1) DEFAULT 1,
+    is_onsite TINYINT(1) DEFAULT 1,
     description TEXT
 );
 

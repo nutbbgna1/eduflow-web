@@ -131,7 +131,6 @@ if ($cat_filter) {
                     <table class="table-desktop">
                         <thead>
                             <tr>
-                                <th>ID</th>
                                 <th>CODE</th>
                                 <th>COURSE NAME</th>
                                 <th>TYPE (รูปแบบ)</th>
@@ -143,7 +142,6 @@ if ($cat_filter) {
                         <tbody>
                             <?php foreach($subjects as $sub): ?>
                             <tr>
-                                <td style="color:var(--text-muted);"><?= $sub['id'] ?></td>
                                 <td><span style="background:var(--primary-light);color:var(--primary);padding:4px 10px;border-radius:6px;font-weight:700;font-size:12px;"><?= htmlspecialchars($sub['code']) ?></span></td>
                                 <td style="font-weight:600;"><?= htmlspecialchars($sub['name']) ?></td>
                                 <td>
