@@ -57,7 +57,7 @@ if ($selected_id) {
                     <p><?= __('Students desc') ?></p>
                 </div>
                 <div>
-                    <button class="btn btn-primary" style="display:flex; align-items:center; gap:8px; padding:8px 16px; border-radius:8px; background:#1D4ED8; color:#fff; border:none; font-weight:600;">
+                    <button class="btn btn-primary" onclick="document.getElementById('studentModal').classList.add('active')" style="display:flex; align-items:center; gap:8px; padding:8px 16px; border-radius:8px; background:#1D4ED8; color:#fff; border:none; font-weight:600; cursor:pointer;">
                         <span class="material-symbols-rounded" style="font-size:20px;">add</span> <?= __('New Student') ?>
                     </button>
                 </div>
@@ -210,6 +210,45 @@ if ($selected_id) {
                 </div>
 
             </div>
+        </div>
+    </div>
+
+    <!-- Add Student Modal -->
+    <div class="modal-overlay" id="studentModal">
+        <div class="modal-box">
+            <h3 style="margin:0 0 24px; font-size:18px; color:#0f172a;">Add New Student</h3>
+            <form action="api/save_student.php" method="POST">
+                <div style="display:flex; gap:12px; margin-bottom:12px;">
+                    <div class="form-group" style="flex:1;">
+                        <label>First Name *</label>
+                        <input type="text" name="first_name" required style="width:100%; padding:10px; border:1px solid var(--border); border-radius:8px;">
+                    </div>
+                    <div class="form-group" style="flex:1;">
+                        <label>Last Name *</label>
+                        <input type="text" name="last_name" required style="width:100%; padding:10px; border:1px solid var(--border); border-radius:8px;">
+                    </div>
+                </div>
+                
+                <div class="form-group" style="margin-bottom:12px;">
+                    <label>Student Code *</label>
+                    <input type="text" name="student_code" required style="width:100%; padding:10px; border:1px solid var(--border); border-radius:8px;" placeholder="e.g. S1001">
+                </div>
+                
+                <div class="form-group" style="margin-bottom:12px;">
+                    <label>Grade (Optional)</label>
+                    <input type="text" name="grade" style="width:100%; padding:10px; border:1px solid var(--border); border-radius:8px;">
+                </div>
+                
+                <div class="form-group" style="margin-bottom:24px;">
+                    <label>Program/Course (Optional)</label>
+                    <input type="text" name="program" style="width:100%; padding:10px; border:1px solid var(--border); border-radius:8px;">
+                </div>
+
+                <div class="modal-footer" style="display:flex; justify-content:flex-end; gap:12px;">
+                    <button type="button" onclick="document.getElementById('studentModal').classList.remove('active')" style="padding:10px 20px;border:1px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;font-weight:600;">Cancel</button>
+                    <button type="submit" style="padding:10px 20px;border:none;border-radius:8px;background:#1D4ED8;color:#fff;cursor:pointer;font-weight:600;">Save</button>
+                </div>
+            </form>
         </div>
     </div>
 </body>
