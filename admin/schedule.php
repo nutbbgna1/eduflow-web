@@ -45,6 +45,37 @@ $colors = ['blue', 'red', 'green', 'purple', 'orange', 'blue', 'red'];
                 }
             }
         }
+        
+        function openScheduleModal() {
+            document.getElementById('modalTitle').innerText = 'Add New Session';
+            document.getElementById('schedule_id').value = '';
+            document.getElementById('deleteBtn').style.display = 'none';
+            document.querySelector('[name="teacher_id"]').value = '';
+            document.querySelector('[name="subject_id"]').value = '';
+            document.querySelector('[name="room"]').value = '';
+            document.querySelector('[name="day_of_week"]').value = 'Monday';
+            document.querySelector('[name="start_time"]').value = '';
+            document.querySelector('[name="end_time"]').value = '';
+            document.getElementById('scheduleModal').classList.add('active');
+        }
+        
+        function editSchedule(s) {
+            document.getElementById('modalTitle').innerText = 'Edit Session';
+            document.getElementById('schedule_id').value = s.id;
+            document.getElementById('deleteBtn').style.display = 'inline-block';
+            document.getElementById('deleteBtn').href = 'api/delete_schedule.php?id=' + s.id;
+            
+            document.querySelector('[name="teacher_id"]').value = s.teacher_id;
+            document.querySelector('[name="subject_id"]').value = s.subject_id;
+            document.querySelector('[name="room"]').value = s.room;
+            document.querySelector('[name="day_of_week"]').value = s.day_of_week;
+            document.querySelector('[name="start_time"]').value = s.start_time;
+            document.querySelector('[name="end_time"]').value = s.end_time;
+            
+            handleSubjectChange(); // to handle room enable/disable
+            
+            document.getElementById('scheduleModal').classList.add('active');
+        }
     </script>
     <style>
         .modal-overlay {
@@ -80,7 +111,7 @@ $colors = ['blue', 'red', 'green', 'purple', 'orange', 'blue', 'red'];
                     <p>Manage classes for the current semester</p>
                 </div>
                 <div style="display:flex; gap:12px; align-items:center;">
-                    <button onclick="document.getElementById('scheduleModal').classList.add('active')" class="btn btn-primary" style="display:flex; align-items:center; gap:8px; padding:8px 16px; border-radius:8px; background:#1D4ED8; color:#fff; border:none; font-weight:600; cursor:pointer;">
+                    <button onclick="openScheduleModal()" class="btn btn-primary" style="display:flex; align-items:center; gap:8px; padding:8px 16px; border-radius:8px; background:#1D4ED8; color:#fff; border:none; font-weight:600; cursor:pointer;">
                         <span class="material-symbols-rounded" style="font-size:20px;">add</span> Add Session
                     </button>
                 </div>
@@ -139,7 +170,8 @@ $colors = ['blue', 'red', 'green', 'purple', 'orange', 'blue', 'red'];
                                 
                                 $color = $colors[$s['id'] % count($colors)];
                                 
-                                echo "<div class='class-block $color' style='top: {$top}px; height: {$height}px;'>";
+                                $json = htmlspecialchars(json_encode($s), ENT_QUOTES, 'UTF-8');
+                                echo "<div class='class-block $color' style='top: {$top}px; height: {$height}px; cursor: pointer;' onclick='editSchedule($json)'>";
                                 echo "<div class='class-title'>" . htmlspecialchars($s['subject_name']) . "</div>";
                                 echo "<div class='class-meta'>" . htmlspecialchars($s['first_name'].' '.$s['last_name']) . " &bull; " . htmlspecialchars($s['room']) . "<br>" . substr($s['start_time'],0,5) . " - " . substr($s['end_time'],0,5) . "</div>";
                                 echo "</div>";
@@ -156,8 +188,9 @@ $colors = ['blue', 'red', 'green', 'purple', 'orange', 'blue', 'red'];
     <!-- Add Schedule Modal -->
     <div class="modal-overlay" id="scheduleModal">
         <div class="modal-box">
-            <h3 style="margin:0 0 24px; font-size:18px; color:#0f172a;">Add New Session</h3>
+            <h3 id="modalTitle" style="margin:0 0 24px; font-size:18px; color:#0f172a;">Add New Session</h3>
             <form action="api/save_schedule.php" method="POST">
+                <input type="hidden" name="id" id="schedule_id">
                 <div class="form-group">
                     <label>Select Teacher</label>
                     <select name="teacher_id" required>
@@ -210,9 +243,14 @@ $colors = ['blue', 'red', 'green', 'purple', 'orange', 'blue', 'red'];
                         <input type="time" name="end_time" required>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" onclick="document.getElementById('scheduleModal').classList.remove('active')" style="padding:10px 20px;border:1px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;font-weight:600;">ยกเลิก</button>
-                    <button type="submit" style="padding:10px 20px;border:none;border-radius:8px;background:#1D4ED8;color:#fff;cursor:pointer;font-weight:600;">บันทึก</button>
+                <div class="modal-footer" style="display:flex; justify-content:space-between; gap:12px;">
+                    <div>
+                        <a href="#" id="deleteBtn" style="display:none; padding:10px 20px; border:1px solid var(--danger); border-radius:8px; background:#fff; color:var(--danger); cursor:pointer; font-weight:600; text-decoration:none;" onclick="return confirm('Are you sure you want to delete this session?')">Delete</a>
+                    </div>
+                    <div style="display:flex; gap:12px;">
+                        <button type="button" onclick="document.getElementById('scheduleModal').classList.remove('active')" style="padding:10px 20px;border:1px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;font-weight:600;">Cancel</button>
+                        <button type="submit" style="padding:10px 20px;border:none;border-radius:8px;background:#1D4ED8;color:#fff;cursor:pointer;font-weight:600;">Save</button>
+                    </div>
                 </div>
             </form>
         </div>

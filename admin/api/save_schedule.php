@@ -10,14 +10,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $start_time = $_POST['start_time'] ?? '';
     $end_time = $_POST['end_time'] ?? '';
 
+    $id = $_POST['id'] ?? '';
+    
     // If room is empty (disabled in frontend for online courses), default to 'Online'
     if (empty($room)) {
         $room = 'Online';
     }
 
     if ($teacher_id && $subject_id && $room && $day_of_week && $start_time && $end_time) {
-        $stmt = $pdo->prepare("INSERT INTO schedules (teacher_id, subject_id, room, day_of_week, start_time, end_time) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$teacher_id, $subject_id, $room, $day_of_week, $start_time, $end_time]);
+        if ($id) {
+            $stmt = $pdo->prepare("UPDATE schedules SET teacher_id=?, subject_id=?, room=?, day_of_week=?, start_time=?, end_time=? WHERE id=?");
+            $stmt->execute([$teacher_id, $subject_id, $room, $day_of_week, $start_time, $end_time, $id]);
+        } else {
+            $stmt = $pdo->prepare("INSERT INTO schedules (teacher_id, subject_id, room, day_of_week, start_time, end_time) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$teacher_id, $subject_id, $room, $day_of_week, $start_time, $end_time]);
+        }
     }
 }
 
