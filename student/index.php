@@ -2,7 +2,12 @@
 require_once '../config/db.php';
 
 $page_title = 'ตารางเรียน';
-$student_id = $_SESSION['user_id'] ?? 2; // Default to student ID 2 for demo purposes
+$student_id = $_SESSION['user_id'] ?? null;
+
+if (!$student_id) {
+    header("Location: ../index.php?error=unauthorized");
+    exit;
+}
 
 // Check if a specific view is requested (today or weekly)
 $view = $_GET['view'] ?? 'today';

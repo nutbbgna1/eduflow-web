@@ -50,6 +50,16 @@ try {
     // Silently ignore if table doesn't exist yet
 }
 
+// Auto-migration: ensure students table has password column
+try {
+    $cols = $pdo->query("SHOW COLUMNS FROM students LIKE 'password'")->fetchAll();
+    if (empty($cols)) {
+        $pdo->exec("ALTER TABLE students ADD COLUMN password VARCHAR(255) NOT NULL DEFAULT '123456' AFTER student_code");
+    }
+} catch (\PDOException $e) {
+    // Silently ignore if table doesn't exist yet
+}
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }

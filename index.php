@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         } else {
             // Check student table
-            $stmt_student = $pdo->prepare("SELECT id, password FROM students WHERE username = :u");
+            $stmt_student = $pdo->prepare("SELECT id, password FROM students WHERE student_code = :u");
             $stmt_student->execute(['u' => $username]);
             $student = $stmt_student->fetch();
 
@@ -178,12 +178,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <form method="POST" action="index.php">
         <div class="form-group">
-            <label>Username</label>
-            <input type="text" name="username" class="form-control" placeholder="ชื่อผู้ใช้" required>
+            <label for="username">Username (ผู้ดูแล/ครู) หรือ รหัสนักเรียน</label>
+            <input type="text" id="username" name="username" class="form-control" placeholder="ชื่อผู้ใช้ หรือ รหัสนักเรียน..." required autocomplete="username">
         </div>
         <div class="form-group">
-            <label>Password</label>
-            <input type="password" name="password" class="form-control" placeholder="รหัสผ่าน" required>
+            <label for="password">รหัสผ่าน</label>
+            <input type="password" id="password" name="password" class="form-control" placeholder="รหัสผ่าน (นักเรียนใช้ 123456)..." required autocomplete="current-password">
         </div>
         <button type="submit" class="btn-primary">เข้าสู่ระบบ</button>
     </form>
