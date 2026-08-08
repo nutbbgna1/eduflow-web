@@ -40,6 +40,16 @@ try {
     ");
 }
 
+// Auto-migration: ensure schedules table has monthly columns
+try {
+    $cols = $pdo->query("SHOW COLUMNS FROM schedules LIKE 'schedule_month'")->fetchAll();
+    if (empty($cols)) {
+        $pdo->exec("ALTER TABLE schedules ADD COLUMN schedule_month VARCHAR(7) NOT NULL DEFAULT '" . date('Y-m') . "' COMMENT 'YYYY-MM format', ADD COLUMN status ENUM('draft', 'published') DEFAULT 'published', ADD INDEX idx_schedule_month (schedule_month)");
+    }
+} catch (\PDOException $e) {
+    // Silently ignore if table doesn't exist yet
+}
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
