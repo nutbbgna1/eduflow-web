@@ -115,4 +115,5 @@ return [
     'End Time' => 'End Time',
     'TIME' => 'TIME',
     'DRAFT' => 'DRAFT',
+'No Course' => 'No Course',
 ];

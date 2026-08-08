@@ -141,10 +141,10 @@ if ($selected_id) {
                                     <div style="color:#334155; font-size:14px;"><?= htmlspecialchars($student['primary_subject'] ?? __('Unassigned')) ?></div>
                                 </td>
                                 <td>
-                                    <?php if($idx % 2 === 0): ?>
-                                        <span style="background:#DCFCE7; color:#16A34A; padding:4px 12px; border-radius:12px; font-size:12px; font-weight:600;"><?= __('Active') ?></span>
+                                    <?php if(!$student['primary_subject']): ?>
+                                        <span style="background:#F1F5F9; color:#475569; padding:4px 12px; border-radius:12px; font-size:12px; font-weight:600;"><?= __('No Course') ?></span>
                                     <?php else: ?>
-                                        <span style="background:#FEF3C7; color:#D97706; padding:4px 12px; border-radius:12px; font-size:12px; font-weight:600;"><?= __('Unpaid') ?></span>
+                                        <span style="background:#DCFCE7; color:#16A34A; padding:4px 12px; border-radius:12px; font-size:12px; font-weight:600;"><?= __('Active') ?></span>
                                     <?php endif; ?>
                                 </td>
                                 <td style="text-align:right;">
