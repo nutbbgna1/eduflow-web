@@ -165,11 +165,13 @@ if ($cat_filter) {
                                     <?php endif; ?>
                                 </td>
                                 <td style="color:var(--text-muted);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><?= htmlspecialchars($sub['description'] ?? '-') ?></td>
-                                <td style="text-align:right;">
-                                    <a href="student_enrollments.php?subject_id=<?= $sub['id'] ?>" style="padding:6px 14px;border:1px solid #10B981;border-radius:6px;color:#10B981;text-decoration:none;font-size:13px;margin-right:6px;">Enroll Students</a>
-                                    <a href="course_content.php?id=<?= $sub['id'] ?>" style="padding:6px 14px;border:1px solid var(--primary);border-radius:6px;color:var(--primary);text-decoration:none;font-size:13px;margin-right:6px;">Manage Content</a>
-                                    <button onclick='editSubject(<?= json_encode($sub) ?>)' style="padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:#fff;cursor:pointer;font-size:13px;margin-right:6px;">Edit</button>
-                                    <a href="api/delete_subject.php?id=<?= $sub['id'] ?>" style="padding:6px 14px;border:1px solid var(--danger);border-radius:6px;color:var(--danger);text-decoration:none;font-size:13px;" onclick="return confirm('ลบรายวิชานี้ใช่ไหม?')">Delete</a>
+                                <td>
+                                    <div style="display:flex; justify-content:flex-end; gap:8px; align-items:center; white-space:nowrap;">
+                                        <a href="student_enrollments.php?subject_id=<?= $sub['id'] ?>" style="padding:6px 14px;border:1px solid #10B981;border-radius:6px;color:#10B981;text-decoration:none;font-size:13px;">Enroll Students</a>
+                                        <a href="course_content.php?id=<?= $sub['id'] ?>" style="padding:6px 14px;border:1px solid var(--primary);border-radius:6px;color:var(--primary);text-decoration:none;font-size:13px;">Manage Content</a>
+                                        <button onclick='editSubject(<?= json_encode($sub) ?>)' style="padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:#fff;cursor:pointer;font-size:13px;">Edit</button>
+                                        <a href="api/delete_subject.php?id=<?= $sub['id'] ?>" style="padding:6px 14px;border:1px solid var(--danger);border-radius:6px;color:var(--danger);text-decoration:none;font-size:13px;" onclick="return confirm('ลบรายวิชานี้ใช่ไหม?')">Delete</a>
+                                    </div>
                                 </td>
                             </tr>
                             <?php endforeach; ?>
