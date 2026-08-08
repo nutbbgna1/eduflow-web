@@ -1,14 +1,15 @@
 <?php
 require_once __DIR__ . '/../config/db.php';
 
-// Fetch teacher's schedules for the dropdown
+// Fetch teacher's schedules for the dropdown (current month, published only)
+$current_leave_month = date('Y-m');
 $stmt = $pdo->prepare("
     SELECT s.*, sub.name as subject_name 
     FROM schedules s
     JOIN subjects sub ON s.subject_id = sub.id
-    WHERE s.teacher_id = :tid
+    WHERE s.teacher_id = :tid AND s.schedule_month = :month AND s.status = 'published'
 ");
-$stmt->execute(['tid' => $current_user_id]);
+$stmt->execute(['tid' => $current_user_id, 'month' => $current_leave_month]);
 $my_schedules = $stmt->fetchAll();
 
 // Fetch other teachers for substitution

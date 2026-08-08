@@ -14,15 +14,16 @@ $thai_days = ['Sunday' => 'อาทิตย์', 'Monday' => 'จันทร�
 $thai_months = ['01'=>'ม.ค.', '02'=>'ก.พ.', '03'=>'มี.ค.', '04'=>'เม.ย.', '05'=>'พ.ค.', '06'=>'มิ.ย.', '07'=>'ก.ค.', '08'=>'ส.ค.', '09'=>'ก.ย.', '10'=>'ต.ค.', '11'=>'พ.ย.', '12'=>'ธ.ค.'];
 $display_date_thai = $thai_days[date('l')] . ', ' . date('j') . ' ' . $thai_months[date('m')] . ' ' . (date('Y') + 543);
 
-// Fetch schedules for today
+// Fetch schedules for today (current month, published only)
+$current_month = date('Y-m');
 $stmt = $pdo->prepare("
     SELECT s.*, sub.name as subject_name, sub.code as subject_code
     FROM schedules s
     JOIN subjects sub ON s.subject_id = sub.id
-    WHERE s.teacher_id = :tid AND s.day_of_week = :day
+    WHERE s.teacher_id = :tid AND s.day_of_week = :day AND s.schedule_month = :month AND s.status = 'published'
     ORDER BY s.start_time
 ");
-$stmt->execute(['tid' => $current_user_id, 'day' => $current_day]);
+$stmt->execute(['tid' => $current_user_id, 'day' => $current_day, 'month' => $current_month]);
 $schedules = $stmt->fetchAll();
 
 // Fetch teaching logs for today to check completion status

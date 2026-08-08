@@ -9,6 +9,7 @@ $view = $_GET['view'] ?? 'today';
 $current_day = date('l');
 
 if ($view === 'today') {
+    $current_schedule_month = date('Y-m');
     $stmt = $pdo->prepare("
         SELECT sch.id as schedule_id, sch.room, sch.start_time, sch.end_time, sch.day_of_week,
                sub.name as subject_name, sub.code as subject_code,
@@ -19,13 +20,17 @@ if ($view === 'today') {
         JOIN users t ON sch.teacher_id = t.id
         WHERE e.student_id = :student_id
           AND sch.day_of_week = :current_day
+          AND sch.schedule_month = :month
+          AND sch.status = 'published'
         ORDER BY sch.start_time ASC
     ");
     $stmt->execute([
         'student_id' => $student_id,
-        'current_day' => $current_day
+        'current_day' => $current_day,
+        'month' => $current_schedule_month
     ]);
 } else {
+    $current_schedule_month = date('Y-m');
     $stmt = $pdo->prepare("
         SELECT sch.id as schedule_id, sch.room, sch.start_time, sch.end_time, sch.day_of_week,
                sub.name as subject_name, sub.code as subject_code,
@@ -35,9 +40,11 @@ if ($view === 'today') {
         JOIN schedules sch ON sub.id = sch.subject_id
         JOIN users t ON sch.teacher_id = t.id
         WHERE e.student_id = :student_id
+          AND sch.schedule_month = :month
+          AND sch.status = 'published'
         ORDER BY FIELD(sch.day_of_week, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'), sch.start_time ASC
     ");
-    $stmt->execute(['student_id' => $student_id]);
+    $stmt->execute(['student_id' => $student_id, 'month' => $current_schedule_month]);
 }
 
 $schedules = $stmt->fetchAll();

@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS enrollments (
     FOREIGN KEY (subject_id) REFERENCES subjects(id)
 );
 
--- 5. Schedules (Timetable)
+-- 5. Schedules (Monthly Timetable)
 CREATE TABLE IF NOT EXISTS schedules (
     id INT AUTO_INCREMENT PRIMARY KEY,
     teacher_id INT NOT NULL,
@@ -51,8 +51,11 @@ CREATE TABLE IF NOT EXISTS schedules (
     day_of_week ENUM('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday') NOT NULL,
     start_time TIME NOT NULL,
     end_time TIME NOT NULL,
+    schedule_month VARCHAR(7) NOT NULL DEFAULT '2026-08' COMMENT 'YYYY-MM format',
+    status ENUM('draft', 'published') DEFAULT 'published',
     FOREIGN KEY (teacher_id) REFERENCES users(id),
-    FOREIGN KEY (subject_id) REFERENCES subjects(id)
+    FOREIGN KEY (subject_id) REFERENCES subjects(id),
+    INDEX idx_schedule_month (schedule_month)
 );
 
 -- 6. Leave Requests & Substitutions

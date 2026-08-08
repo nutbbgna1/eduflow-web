@@ -7,8 +7,9 @@ $active_students = $pdo->query("SELECT COUNT(*) FROM students")->fetchColumn();
 $active_teachers = $pdo->query("SELECT COUNT(*) FROM users WHERE role = 'teacher'")->fetchColumn();
 $total_subjects = $pdo->query("SELECT COUNT(*) FROM subjects")->fetchColumn();
 $current_day = date('l');
-$today_classes = $pdo->prepare("SELECT COUNT(*) FROM schedules WHERE day_of_week = :day");
-$today_classes->execute(['day' => $current_day]);
+$current_month = date('Y-m');
+$today_classes = $pdo->prepare("SELECT COUNT(*) FROM schedules WHERE day_of_week = :day AND schedule_month = :month AND status = 'published'");
+$today_classes->execute(['day' => $current_day, 'month' => $current_month]);
 $today_classes = $today_classes->fetchColumn();
 
 // Pending Leaves
