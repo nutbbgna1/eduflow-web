@@ -197,12 +197,12 @@ $is_past = ($view_month < $current_month);
                 <?php if ($_GET['success'] === 'copied'): ?>
                     <div class="alert-bar success">
                         <span class="material-symbols-rounded">check_circle</span>
-                        คัดลอกตารางสำเร็จ! ตารางทั้งหมดถูกคัดลอกมาเป็น "แบบร่าง" สามารถแก้ไขและเผยแพร่ได้
+                        <?= __('Schedule copied successfully! All sessions are copied as drafts.') ?>
                     </div>
                 <?php elseif ($_GET['success'] === 'published'): ?>
                     <div class="alert-bar success">
                         <span class="material-symbols-rounded">check_circle</span>
-                        เผยแพร่ตารางเรียนเดือนนี้เรียบร้อยแล้ว ครูและนักเรียนสามารถเห็นตารางนี้ได้แล้ว
+                        <?= __('Schedule published successfully. Teachers and students can now see it.') ?>
                     </div>
                 <?php endif; ?>
             <?php endif; ?>
@@ -211,25 +211,25 @@ $is_past = ($view_month < $current_month);
                 <?php if ($_GET['error'] === 'conflict'): ?>
                     <div class="alert-bar error">
                         <span class="material-symbols-rounded">warning</span>
-                        ไม่สามารถบันทึกได้! พบการจัดตารางที่ซ้อนกัน (ครูหรือห้องเรียนถูกจองในเวลาเดียวกัน)
+                        <?= __('Cannot save! Conflict detected (Teacher or Room is already booked).') ?>
                     </div>
                 <?php elseif ($_GET['error'] === 'exists'): ?>
                     <div class="alert-bar error">
                         <span class="material-symbols-rounded">warning</span>
-                        เดือนปลายทางมีตารางอยู่แล้ว ไม่สามารถคัดลอกทับได้ กรุณาลบตารางเดิมก่อน
+                        <?= __('Target month already has a schedule. Cannot overwrite.') ?>
                     </div>
                 <?php elseif ($_GET['error'] === 'in_use'): ?>
                     <div class="alert-bar error">
                         <span class="material-symbols-rounded">warning</span>
-                        ไม่สามารถลบคาบนี้ได้ เนื่องจากมีบันทึกการสอนหรือคำขอลาที่อ้างอิงอยู่
+                        <?= __('Cannot delete this session because it is referenced by a teaching log or leave request.') ?>
                     </div>
                 <?php endif; ?>
             <?php endif; ?>
 
             <div class="page-header" style="align-items:center;">
                 <div class="page-title">
-                    <h1 style="margin-bottom:0;">Weekly Schedule</h1>
-                    <p>Manage classes for the current semester</p>
+                    <h1 style="margin-bottom:0;"><?= __('Weekly Schedule') ?></h1>
+                    <p><?= __('Manage classes for the current month') ?></p>
                 </div>
             </div>
             
@@ -248,48 +248,48 @@ $is_past = ($view_month < $current_month);
                     </a>
                     
                     <?php if ($is_current): ?>
-                        <span class="status-badge current">เดือนปัจจุบัน</span>
+                        <span class="status-badge current"><?= __('Current Month') ?></span>
                     <?php elseif ($is_past): ?>
-                        <span class="status-badge none">เดือนที่ผ่านมา</span>
+                        <span class="status-badge none"><?= __('Past Month') ?></span>
                     <?php endif; ?>
                     
                     <?php if ($month_status === 'draft'): ?>
-                        <span class="status-badge draft">แบบร่าง</span>
+                        <span class="status-badge draft"><?= __('Draft') ?></span>
                     <?php elseif ($month_status === 'published'): ?>
-                        <span class="status-badge published">เผยแพร่แล้ว</span>
+                        <span class="status-badge published"><?= __('Published') ?></span>
                     <?php else: ?>
-                        <span class="status-badge none">ยังไม่มีตาราง</span>
+                        <span class="status-badge none"><?= __('No Schedule') ?></span>
                     <?php endif; ?>
                 </div>
                 
                 <!-- Action Bar -->
                 <div class="action-bar" style="margin-top:12px; padding-top:12px; border-top:1px solid #F1F5F9;">
                     <button onclick="openScheduleModal()" class="btn-action primary">
-                        <span class="material-symbols-rounded" style="font-size:18px;">add</span> เพิ่มคาบเรียน
+                        <span class="material-symbols-rounded" style="font-size:18px;">add</span> <?= __('Add Session') ?>
                     </button>
                     
                     <?php if ($month_status === 'none' && $prev_has_schedules): ?>
-                        <form action="api/copy_schedule_month.php" method="POST" style="display:inline;" onsubmit="return confirm('คัดลอกตารางจากเดือนก่อนหน้า (<?= $prev_month ?>) มาที่เดือนนี้?')">
+                        <form action="api/copy_schedule_month.php" method="POST" style="display:inline;" onsubmit="return confirm('<?= __('Copy from previous month') ?> (<?= $prev_month ?>)?')">
                             <input type="hidden" name="source_month" value="<?= $prev_month ?>">
                             <input type="hidden" name="target_month" value="<?= $view_month ?>">
                             <button type="submit" class="btn-action">
-                                <span class="material-symbols-rounded" style="font-size:18px;">content_copy</span> คัดลอกจากเดือนก่อน
+                                <span class="material-symbols-rounded" style="font-size:18px;">content_copy</span> <?= __('Copy from previous month') ?>
                             </button>
                         </form>
                     <?php endif; ?>
                     
                     <?php if ($month_status === 'draft'): ?>
-                        <form action="api/publish_schedule.php" method="POST" style="display:inline;" onsubmit="return confirm('เผยแพร่ตารางเรียนเดือนนี้ให้ครูและนักเรียนเห็นหรือไม่?')">
+                        <form action="api/publish_schedule.php" method="POST" style="display:inline;" onsubmit="return confirm('<?= __('Publish Schedule') ?>?')">
                             <input type="hidden" name="month" value="<?= $view_month ?>">
                             <button type="submit" class="btn-action publish">
-                                <span class="material-symbols-rounded" style="font-size:18px;">publish</span> เผยแพร่ตาราง
+                                <span class="material-symbols-rounded" style="font-size:18px;">publish</span> <?= __('Publish Schedule') ?>
                             </button>
                         </form>
                     <?php endif; ?>
                     
                     <?php if ($view_month !== $current_month): ?>
                         <a href="?month=<?= $current_month ?>" class="btn-action">
-                            <span class="material-symbols-rounded" style="font-size:18px;">today</span> กลับเดือนปัจจุบัน
+                            <span class="material-symbols-rounded" style="font-size:18px;">today</span> <?= __('Back to Current Month') ?>
                         </a>
                     <?php endif; ?>
                 </div>
@@ -298,14 +298,14 @@ $is_past = ($view_month < $current_month);
             <!-- Calendar Grid -->
             <div class="calendar-wrapper">
                 <div class="calendar-header-row">
-                    <div class="cal-head-cell" style="display:flex; align-items:center; justify-content:center; color:#94A3B8; font-size:11px;">TIME</div>
-                    <div class="cal-head-cell">Monday</div>
-                    <div class="cal-head-cell">Tuesday</div>
-                    <div class="cal-head-cell">Wednesday</div>
-                    <div class="cal-head-cell">Thursday</div>
-                    <div class="cal-head-cell">Friday</div>
-                    <div class="cal-head-cell">Saturday</div>
-                    <div class="cal-head-cell">Sunday</div>
+                    <div class="cal-head-cell" style="display:flex; align-items:center; justify-content:center; color:#94A3B8; font-size:11px;"><?= __('TIME') ?></div>
+                    <div class="cal-head-cell"><?= __('Monday') ?></div>
+                    <div class="cal-head-cell"><?= __('Tuesday') ?></div>
+                    <div class="cal-head-cell"><?= __('Wednesday') ?></div>
+                    <div class="cal-head-cell"><?= __('Thursday') ?></div>
+                    <div class="cal-head-cell"><?= __('Friday') ?></div>
+                    <div class="cal-head-cell"><?= __('Saturday') ?></div>
+                    <div class="cal-head-cell"><?= __('Sunday') ?></div>
                 </div>
                 
                 <div class="calendar-body">
@@ -350,7 +350,7 @@ $is_past = ($view_month < $current_month);
                                 $json = htmlspecialchars(json_encode($s), ENT_QUOTES, 'UTF-8');
                                 echo "<div class='class-block $color' style='top: {$top}px; height: {$height}px; cursor: pointer; $draft_style' onclick='editSchedule($json)'>";
                                 if ($is_draft) {
-                                    echo "<div style='position:absolute; top:2px; right:4px; font-size:9px; background:rgba(0,0,0,0.15); padding:1px 6px; border-radius:4px;'>DRAFT</div>";
+                                    echo "<div style='position:absolute; top:2px; right:4px; font-size:9px; background:rgba(0,0,0,0.15); padding:1px 6px; border-radius:4px;'>" . __('DRAFT') . "</div>";
                                 }
                                 echo "<div class='class-title'>" . htmlspecialchars($s['subject_name']) . "</div>";
                                 echo "<div class='class-meta'>" . htmlspecialchars($s['first_name'].' '.$s['last_name']) . " &bull; " . htmlspecialchars($s['room']) . "<br>" . substr($s['start_time'],0,5) . " - " . substr($s['end_time'],0,5) . "</div>";
@@ -367,7 +367,7 @@ $is_past = ($view_month < $current_month);
             <?php if (!empty($schedules)): ?>
             <div style="background:#fff; border:1px solid #E2E8F0; border-radius:12px; padding:20px 24px; margin-top:20px;">
                 <div style="font-weight:700; font-size:15px; color:#0F172A; margin-bottom:12px;">
-                    สรุปตารางเดือนนี้ — <?= count($schedules) ?> คาบ
+                    <?= __('Schedule Summary for this month') ?> — <?= count($schedules) ?> <?= __('sessions') ?>
                 </div>
                 <div style="display:flex; gap:24px; flex-wrap:wrap;">
                     <?php
@@ -378,7 +378,8 @@ $is_past = ($view_month < $current_month);
                     foreach ($days as $d) {
                         $count = $by_day[$d] ?? 0;
                         if ($count > 0) {
-                            echo "<div style='font-size:13px; color:#475569;'><strong>$d:</strong> $count คาบ</div>";
+                            $translated_day = __($d);
+                            echo "<div style='font-size:13px; color:#475569;'><strong>$translated_day:</strong> $count " . __('sessions') . "</div>";
                         }
                     }
                     ?>
@@ -392,23 +393,23 @@ $is_past = ($view_month < $current_month);
     <!-- Schedule Modal -->
     <div class="modal-overlay" id="scheduleModal">
         <div class="modal-box">
-            <h3 id="modalTitle" style="margin:0 0 24px; font-size:18px; color:#0f172a;">Add New Session</h3>
+            <h3 id="modalTitle" style="margin:0 0 24px; font-size:18px; color:#0f172a;"><?= __('Add New Session') ?></h3>
             <form action="api/save_schedule.php" method="POST">
                 <input type="hidden" name="id" id="schedule_id">
                 <input type="hidden" name="schedule_month" value="<?= $view_month ?>">
                 <div class="form-group">
-                    <label>Select Teacher</label>
+                    <label><?= __('Select Teacher') ?></label>
                     <select name="teacher_id" required>
-                        <option value="">-- เลือกครูผู้สอน --</option>
+                        <option value=""><?= __('-- Select Teacher --') ?></option>
                         <?php foreach($teachers as $t): ?>
                             <option value="<?= $t['id'] ?>"><?= htmlspecialchars($t['first_name'].' '.$t['last_name']) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Select Course</label>
+                    <label><?= __('Select Course') ?></label>
                     <select name="subject_id" id="subject_select" required onchange="handleSubjectChange()">
-                        <option value="">-- เลือกคอร์สเรียน --</option>
+                        <option value=""><?= __('-- Select Course --') ?></option>
                         <?php foreach($subjects_list as $sub): ?>
                             <option value="<?= $sub['id'] ?>" data-onsite="<?= $sub['is_onsite'] ? '1' : '0' ?>">
                                 <?= htmlspecialchars($sub['code'].' - '.$sub['name']) ?>
@@ -417,9 +418,9 @@ $is_past = ($view_month < $current_month);
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Room</label>
+                    <label><?= __('Room') ?></label>
                     <select name="room" id="room_select" required>
-                        <option value="">-- เลือกห้องเรียน --</option>
+                        <option value=""><?= __('-- Select Room --') ?></option>
                         <option value="Online" style="display:none;" id="online_room_option">Online</option>
                         <?php foreach($rooms as $r): ?>
                             <option value="<?= htmlspecialchars($r['name']) ?>"><?= htmlspecialchars($r['name']) ?></option>
@@ -427,34 +428,34 @@ $is_past = ($view_month < $current_month);
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Day of Week</label>
+                    <label><?= __('Day of Week') ?></label>
                     <select name="day_of_week" required>
-                        <option value="Monday">Monday</option>
-                        <option value="Tuesday">Tuesday</option>
-                        <option value="Wednesday">Wednesday</option>
-                        <option value="Thursday">Thursday</option>
-                        <option value="Friday">Friday</option>
-                        <option value="Saturday">Saturday</option>
-                        <option value="Sunday">Sunday</option>
+                        <option value="Monday"><?= __('Monday') ?></option>
+                        <option value="Tuesday"><?= __('Tuesday') ?></option>
+                        <option value="Wednesday"><?= __('Wednesday') ?></option>
+                        <option value="Thursday"><?= __('Thursday') ?></option>
+                        <option value="Friday"><?= __('Friday') ?></option>
+                        <option value="Saturday"><?= __('Saturday') ?></option>
+                        <option value="Sunday"><?= __('Sunday') ?></option>
                     </select>
                 </div>
                 <div style="display:flex; gap:12px;">
                     <div class="form-group" style="flex:1;">
-                        <label>Start Time</label>
+                        <label><?= __('Start Time') ?></label>
                         <input type="time" name="start_time" required>
                     </div>
                     <div class="form-group" style="flex:1;">
-                        <label>End Time</label>
+                        <label><?= __('End Time') ?></label>
                         <input type="time" name="end_time" required>
                     </div>
                 </div>
                 <div class="modal-footer" style="display:flex; justify-content:space-between; gap:12px;">
                     <div>
-                        <a href="#" id="deleteBtn" style="display:none; padding:10px 20px; border:1px solid var(--danger); border-radius:8px; background:#fff; color:var(--danger); cursor:pointer; font-weight:600; text-decoration:none;" onclick="return confirm('ลบคาบเรียนนี้ใช่ไหม?')">Delete</a>
+                        <a href="#" id="deleteBtn" style="display:none; padding:10px 20px; border:1px solid var(--danger); border-radius:8px; background:#fff; color:var(--danger); cursor:pointer; font-weight:600; text-decoration:none;" onclick="return confirm('<?= __('Delete') ?>?')"><?= __('Delete') ?></a>
                     </div>
                     <div style="display:flex; gap:12px;">
-                        <button type="button" onclick="document.getElementById('scheduleModal').classList.remove('active')" style="padding:10px 20px;border:1px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;font-weight:600;">Cancel</button>
-                        <button type="submit" style="padding:10px 20px;border:none;border-radius:8px;background:#1D4ED8;color:#fff;cursor:pointer;font-weight:600;">Save</button>
+                        <button type="button" onclick="document.getElementById('scheduleModal').classList.remove('active')" style="padding:10px 20px;border:1px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;font-weight:600;"><?= __('Cancel') ?></button>
+                        <button type="submit" style="padding:10px 20px;border:none;border-radius:8px;background:#1D4ED8;color:#fff;cursor:pointer;font-weight:600;"><?= __('Save') ?></button>
                     </div>
                 </div>
             </form>
