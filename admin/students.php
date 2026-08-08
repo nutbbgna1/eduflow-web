@@ -30,12 +30,12 @@ $students = $stmt->fetchAll();
             
             <div class="page-header" style="align-items:center;">
                 <div class="page-title">
-                    <h1 style="margin-bottom:0;">Students</h1>
-                    <p>Manage enrollments, schedules, and academic profiles.</p>
+                    <h1 style="margin-bottom:0;"><?= __('Students') ?></h1>
+                    <p><?= __('Students desc') ?></p>
                 </div>
                 <div>
                     <button class="btn btn-primary" style="display:flex; align-items:center; gap:8px; padding:8px 16px; border-radius:8px; background:#1D4ED8; color:#fff; border:none; font-weight:600;">
-                        <span class="material-symbols-rounded" style="font-size:20px;">add</span> New Student
+                        <span class="material-symbols-rounded" style="font-size:20px;">add</span> <?= __('New Student') ?>
                     </button>
                 </div>
             </div>
@@ -45,10 +45,10 @@ $students = $stmt->fetchAll();
                 <!-- Left Pane: Roster -->
                 <div class="panel-d" style="padding:0; overflow:hidden;">
                     <div style="padding:24px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
-                        <h2 style="font-size:18px; font-weight:700;">Active Roster</h2>
+                        <h2 style="font-size:18px; font-weight:700;"><?= __('Active Roster') ?></h2>
                         <div style="display:flex; gap:12px;">
                             <select style="padding:8px 16px; border-radius:8px; border:1px solid var(--border); background:#fff; outline:none; font-size:14px;">
-                                <option>All Subjects</option>
+                                <option><?= __('All Subjects') ?></option>
                             </select>
                             <button class="btn btn-outline" style="padding:8px; border-radius:8px; border:1px solid var(--border); background:#fff; color:#64748B; display:flex; align-items:center;">
                                 <span class="material-symbols-rounded" style="font-size:20px;">filter_list</span>
@@ -59,10 +59,10 @@ $students = $stmt->fetchAll();
                     <table class="table-desktop">
                         <thead>
                             <tr>
-                                <th>ID / STUDENT</th>
-                                <th>PRIMARY SUBJECT</th>
-                                <th>STATUS</th>
-                                <th style="text-align:right;">ACTIONS</th>
+                                <th><?= __('ID / STUDENT') ?></th>
+                                <th><?= __('PRIMARY SUBJECT') ?></th>
+                                <th><?= __('STATUS') ?></th>
+                                <th style="text-align:right;"><?= __('ACTIONS') ?></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -88,13 +88,13 @@ $students = $stmt->fetchAll();
                                     </div>
                                 </td>
                                 <td>
-                                    <div style="color:#334155; font-size:14px;"><?= htmlspecialchars($student['primary_subject'] ?? 'Unassigned') ?></div>
+                                    <div style="color:#334155; font-size:14px;"><?= htmlspecialchars($student['primary_subject'] ?? __('Unassigned')) ?></div>
                                 </td>
                                 <td>
                                     <?php if($idx % 2 === 0): ?>
-                                        <span style="background:#DCFCE7; color:#16A34A; padding:4px 12px; border-radius:12px; font-size:12px; font-weight:600;">Active</span>
+                                        <span style="background:#DCFCE7; color:#16A34A; padding:4px 12px; border-radius:12px; font-size:12px; font-weight:600;"><?= __('Active') ?></span>
                                     <?php else: ?>
-                                        <span style="background:#FEF3C7; color:#D97706; padding:4px 12px; border-radius:12px; font-size:12px; font-weight:600;">Unpaid</span>
+                                        <span style="background:#FEF3C7; color:#D97706; padding:4px 12px; border-radius:12px; font-size:12px; font-weight:600;"><?= __('Unpaid') ?></span>
                                     <?php endif; ?>
                                 </td>
                                 <td style="text-align:right;">
@@ -107,7 +107,7 @@ $students = $stmt->fetchAll();
                         </tbody>
                     </table>
                     <div style="padding:16px 24px; border-top:1px solid #E2E8F0; display:flex; justify-content:space-between; align-items:center; color:#64748B; font-size:14px;">
-                        <div>Showing 1-10 of 245 students</div>
+                        <div><?= __('Showing text') ?></div>
                         <div style="display:flex; gap:8px;">
                             <button class="btn btn-outline" style="padding:4px; border-radius:6px; border:none; background:transparent; color:#94A3B8;" disabled><span class="material-symbols-rounded">chevron_left</span></button>
                             <button class="btn btn-outline" style="padding:4px; border-radius:6px; border:none; background:transparent; color:#0F172A;"><span class="material-symbols-rounded">chevron_right</span></button>
@@ -125,7 +125,7 @@ $students = $stmt->fetchAll();
                             <div class="profile-card-meta">S0002 &bull; Junior Year</div>
                             
                             <div class="profile-card-actions">
-                                <button class="btn" style="flex:1; padding:10px; border-radius:8px; background:#F1F5F9; color:#0F172A; border:none; font-weight:600;">Add Subject</button>
+                                <button class="btn" style="flex:1; padding:10px; border-radius:8px; background:#F1F5F9; color:#0F172A; border:none; font-weight:600;"><?= __('Add Subject') ?></button>
                                 <button class="btn" style="padding:10px; border-radius:8px; background:#fff; border:1px solid var(--border); color:#64748B;"><span class="material-symbols-rounded">pause</span></button>
                                 <button class="btn" style="padding:10px; border-radius:8px; background:#fff; border:1px solid var(--border); color:#64748B;"><span class="material-symbols-rounded">person_remove</span></button>
                             </div>
@@ -133,7 +133,7 @@ $students = $stmt->fetchAll();
                     </div>
 
                     <div class="subjects-card">
-                        <h3>ENROLLED SUBJECTS</h3>
+                        <h3><?= __('ENROLLED SUBJECTS') ?></h3>
                         <div class="subject-item">
                             <div>
                                 <div style="font-weight:700; font-size:14px; color:#0F172A;">Physics 101</div>
@@ -153,13 +153,13 @@ $students = $stmt->fetchAll();
                     <div class="status-cards">
                         <div class="status-card">
                             <span class="material-symbols-rounded" style="color:#D97706;">payments</span>
-                            <div class="status-card-title">Payment Status</div>
-                            <div class="status-card-value" style="color:#D97706;">Unpaid</div>
+                            <div class="status-card-title"><?= __('Payment Status') ?></div>
+                            <div class="status-card-value" style="color:#D97706;"><?= __('Unpaid') ?></div>
                         </div>
                         <div class="status-card">
                             <span class="material-symbols-rounded" style="color:#16A34A;">badge</span>
-                            <div class="status-card-title">RFID Card</div>
-                            <div class="status-card-value" style="color:#16A34A;">Linked</div>
+                            <div class="status-card-title"><?= __('RFID Card') ?></div>
+                            <div class="status-card-value" style="color:#16A34A;"><?= __('Linked') ?></div>
                         </div>
                     </div>
                 </div>

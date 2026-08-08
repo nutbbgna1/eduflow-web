@@ -8,10 +8,15 @@
     
     <div class="search-bar">
         <span class="material-symbols-rounded" style="color: #94A3B8; font-size: 20px;">search</span>
-        <input type="text" placeholder="Search...">
+        <input type="text" placeholder="<?= __('Search...') ?>">
     </div>
     
     <div class="header-right">
+        <div style="display:flex; align-items:center; gap:8px; margin-right:16px;">
+            <a href="?lang=th" style="text-decoration:none; font-weight:600; color: <?= $_SESSION['lang'] === 'th' ? 'var(--primary)' : '#94A3B8' ?>;">TH</a>
+            <span style="color:#CBD5E1;">|</span>
+            <a href="?lang=en" style="text-decoration:none; font-weight:600; color: <?= $_SESSION['lang'] === 'en' ? 'var(--primary)' : '#94A3B8' ?>;">EN</a>
+        </div>
         <span class="material-symbols-rounded header-icon">notifications</span>
         <span class="material-symbols-rounded header-icon">settings</span>
         <span class="material-symbols-rounded header-icon">help</span>

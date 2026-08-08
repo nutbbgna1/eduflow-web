@@ -42,15 +42,15 @@ $pending_leaves = $stmt->fetchAll();
             
             <div class="page-header">
                 <div class="page-title">
-                    <h1>Dashboard Overview</h1>
-                    <p>Welcome back. Here's what's happening today.</p>
+                    <h1><?= __('Dashboard Overview') ?></h1>
+                    <p><?= __('Welcome back. Here\'s what\'s happening today.') ?></p>
                 </div>
                 <div style="display: flex; gap: 12px;">
                     <button class="btn btn-outline" style="display:flex; align-items:center; gap:8px; padding:10px 16px; border-radius:8px; border:1px solid var(--border); background:#fff; font-weight:600;">
-                        <span class="material-symbols-rounded" style="font-size:18px;">download</span> Export Report
+                        <span class="material-symbols-rounded" style="font-size:18px;">download</span> <?= __('Export Report') ?>
                     </button>
                     <button class="btn btn-primary" style="padding:10px 16px; border-radius:8px; background:var(--primary); color:#fff; border:none; font-weight:600;">
-                        New Enrollment
+                        <?= __('New Enrollment') ?>
                     </button>
                 </div>
             </div>
@@ -60,7 +60,7 @@ $pending_leaves = $stmt->fetchAll();
                 <div class="stat-card-d">
                     <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                         <div>
-                            <div class="sc-title">นักเรียนทั้งหมด (คน)</div>
+                            <div class="sc-title"><?= __('Total Students') ?></div>
                             <div class="sc-value"><?= number_format($active_students) ?></div>
                         </div>
                         <div style="width:40px; height:40px; border-radius:50%; background:#EFF6FF; display:flex; align-items:center; justify-content:center; color:#3B82F6;">
@@ -72,7 +72,7 @@ $pending_leaves = $stmt->fetchAll();
                 <div class="stat-card-d">
                     <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                         <div>
-                            <div class="sc-title">ครูทั้งหมด (คน)</div>
+                            <div class="sc-title"><?= __('Total Teachers') ?></div>
                             <div class="sc-value"><?= number_format($active_teachers) ?></div>
                         </div>
                         <div style="width:40px; height:40px; border-radius:50%; background:#F1F5F9; display:flex; align-items:center; justify-content:center; color:#64748B;">
@@ -84,7 +84,7 @@ $pending_leaves = $stmt->fetchAll();
                 <div class="stat-card-d">
                     <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                         <div>
-                            <div class="sc-title">วิชาเรียนทั้งหมด</div>
+                            <div class="sc-title"><?= __('Total Subjects') ?></div>
                             <div class="sc-value"><?= number_format($total_subjects) ?></div>
                         </div>
                         <div style="width:40px; height:40px; border-radius:50%; background:#EFF6FF; display:flex; align-items:center; justify-content:center; color:#3B82F6;">
@@ -96,7 +96,7 @@ $pending_leaves = $stmt->fetchAll();
                 <div class="stat-card-d" style="border-top: 4px solid #10B981;">
                     <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                         <div>
-                            <div class="sc-title">คาบเรียนวันนี้</div>
+                            <div class="sc-title"><?= __('Today\'s Classes') ?></div>
                             <div class="sc-value"><?= number_format($today_classes) ?></div>
                         </div>
                         <div style="width:40px; height:40px; border-radius:50%; background:#D1FAE5; display:flex; align-items:center; justify-content:center; color:#059669;">
@@ -112,12 +112,12 @@ $pending_leaves = $stmt->fetchAll();
             <div class="dash-bottom-row">
                 <div class="panel-d">
                     <div class="panel-d-title">
-                        Pending Leave Requests
-                        <a href="leave.php" style="font-size:14px; color:var(--primary); font-weight:600; text-decoration:none;">View All &rarr;</a>
+                        <?= __('Pending Leave Requests') ?>
+                        <a href="leave.php" style="font-size:14px; color:var(--primary); font-weight:600; text-decoration:none;"><?= __('View All') ?> &rarr;</a>
                     </div>
                     
                     <?php if (empty($pending_leaves)): ?>
-                        <div style="color:#64748B; padding:20px 0;">No pending requests.</div>
+                        <div style="color:#64748B; padding:20px 0;"><?= __('No pending requests.') ?></div>
                     <?php else: ?>
                         <?php foreach($pending_leaves as $leave): 
                             $initials = getInitials($leave['first_name'], $leave['last_name']);
@@ -142,23 +142,23 @@ $pending_leaves = $stmt->fetchAll();
                 </div>
 
                 <div class="panel-d">
-                    <div class="panel-d-title">Quick Actions</div>
+                    <div class="panel-d-title"><?= __('Quick Actions') ?></div>
                     <div class="qa-grid">
                         <a href="staff.php" class="qa-btn" style="text-decoration:none;">
                             <span class="material-symbols-rounded">person_add</span>
-                            Add Teacher
+                            <?= __('Add Teacher') ?>
                         </a>
                         <a href="schedule.php" class="qa-btn" style="text-decoration:none;">
                             <span class="material-symbols-rounded">event</span>
-                            New Event
+                            <?= __('New Event') ?>
                         </a>
                         <a href="#" class="qa-btn" style="text-decoration:none;">
                             <span class="material-symbols-rounded">campaign</span>
-                            Announcement
+                            <?= __('Announcement') ?>
                         </a>
                         <a href="#" class="qa-btn" style="text-decoration:none;">
                             <span class="material-symbols-rounded">description</span>
-                            Generate Report
+                            <?= __('Generate Report') ?>
                         </a>
                     </div>
                 </div>

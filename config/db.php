@@ -44,6 +44,36 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// Handle Language Switch
+if (isset($_GET['lang']) && in_array($_GET['lang'], ['th', 'en'])) {
+    $_SESSION['lang'] = $_GET['lang'];
+    // Optional: redirect to the same page without the lang parameter to clean up the URL
+    $url = preg_replace('/([?&])lang=[^&]+(&|$)/', '$1', $_SERVER['REQUEST_URI']);
+    $url = rtrim($url, '?&');
+    header("Location: $url");
+    exit;
+}
+
+if (!isset($_SESSION['lang'])) {
+    $_SESSION['lang'] = 'th'; // Default to Thai
+}
+
+function __($key) {
+    global $translations;
+    if (!isset($translations)) {
+        $lang = $_SESSION['lang'] ?? 'th';
+        // Allow fallback if called from different nested directories
+        $base = strpos($_SERVER['SCRIPT_NAME'], '/admin/') !== false ? __DIR__ . '/../admin/includes/lang/' : __DIR__ . '/../admin/includes/lang/';
+        $lang_file = $base . "{$lang}.php";
+        if (file_exists($lang_file)) {
+            $translations = require $lang_file;
+        } else {
+            $translations = [];
+        }
+    }
+    return $translations[$key] ?? $key;
+}
+
 // Fix for legacy mock sessions causing redirect loops
 if (isset($_SESSION['user_id']) && !isset($_SESSION['role'])) {
     session_unset();

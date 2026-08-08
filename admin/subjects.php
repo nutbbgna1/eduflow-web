@@ -93,20 +93,20 @@ if ($cat_filter) {
 
             <div class="page-header">
                 <div class="page-title">
-                    <h1>Courses (คอร์สเรียน)</h1>
-                    <p>จัดการคอร์สเรียนที่เปิดสอนในสถาบัน</p>
+                    <h1><?= __('Courses Title') ?></h1>
+                    <p><?= __('Manage courses description') ?></p>
                 </div>
                 <div style="display:flex; gap: 12px; flex-wrap:wrap; justify-content:flex-end;">
                     <form method="GET" action="subjects.php" style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
                         <select name="cat" onchange="this.form.submit()" style="padding:10px 14px; border:1px solid #E2E8F0; border-radius:8px; outline:none; cursor:pointer; font-family:inherit; color:#475569;">
-                            <option value="">ทุกหมวดหมู่หลัก (All)</option>
+                            <option value=""><?= __('All Categories') ?></option>
                             <?php foreach($main_categories as $cat): ?>
                             <option value="<?= $cat['id'] ?>" <?= $cat_filter == $cat['id'] ? 'selected' : '' ?>><?= htmlspecialchars($cat['name']) ?></option>
                             <?php endforeach; ?>
                         </select>
                         <?php if ($cat_filter && count($subcategories) > 0): ?>
                         <select name="subcat" onchange="this.form.submit()" style="padding:10px 14px; border:1px solid #E2E8F0; border-radius:8px; outline:none; cursor:pointer; font-family:inherit; color:#475569;">
-                            <option value="">ทุกหมวดหมู่ย่อย (All)</option>
+                            <option value=""><?= __('All Subcategories') ?></option>
                             <?php foreach($subcategories as $scat): ?>
                             <option value="<?= $scat['id'] ?>" <?= $subcat_filter == $scat['id'] ? 'selected' : '' ?>><?= htmlspecialchars($scat['name']) ?></option>
                             <?php endforeach; ?>
@@ -114,7 +114,7 @@ if ($cat_filter) {
                         <?php endif; ?>
                     </form>
                     <button class="btn btn-primary" onclick="openSubjectModal()" style="display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:8px;background:var(--primary);color:#fff;border:none;font-weight:600;cursor:pointer;">
-                        <span class="material-symbols-rounded" style="font-size:20px;">add</span> Add Course
+                        <span class="material-symbols-rounded" style="font-size:20px;">add</span> <?= __('Add Course') ?>
                     </button>
                 </div>
             </div>
@@ -122,7 +122,7 @@ if ($cat_filter) {
             <?php if (isset($_GET['error']) && $_GET['error'] == 'in_use'): ?>
             <div style="background:#FEE2E2;color:#991B1B;padding:12px 16px;border-radius:8px;margin-bottom:20px;display:flex;align-items:center;gap:8px;">
                 <span class="material-symbols-rounded">warning</span>
-                ไม่สามารถลบรายวิชานี้ได้ เนื่องจากมีตารางสอนหรือการลงทะเบียนที่อ้างอิงอยู่
+                <?= __('Cannot delete course warning') ?>
             </div>
             <?php endif; ?>
 
@@ -131,12 +131,12 @@ if ($cat_filter) {
                     <table class="table-desktop">
                         <thead>
                             <tr>
-                                <th>CODE</th>
-                                <th>COURSE NAME</th>
-                                <th>TYPE (รูปแบบ)</th>
-                                <th>CATEGORY (หมวดหมู่)</th>
-                                <th>DESCRIPTION</th>
-                                <th style="text-align:right;">ACTIONS</th>
+                                <th><?= __('CODE') ?></th>
+                                <th><?= __('COURSE NAME') ?></th>
+                                <th><?= __('TYPE') ?></th>
+                                <th><?= __('CATEGORY') ?></th>
+                                <th><?= __('DESCRIPTION') ?></th>
+                                <th style="text-align:right;"><?= __('ACTIONS') ?></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -167,10 +167,10 @@ if ($cat_filter) {
                                 <td style="color:var(--text-muted);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><?= htmlspecialchars($sub['description'] ?? '-') ?></td>
                                 <td>
                                     <div style="display:flex; justify-content:flex-end; gap:8px; align-items:center; white-space:nowrap;">
-                                        <a href="student_enrollments.php?subject_id=<?= $sub['id'] ?>" style="padding:6px 14px;border:1px solid #10B981;border-radius:6px;color:#10B981;text-decoration:none;font-size:13px;">Enroll Students</a>
-                                        <a href="course_content.php?id=<?= $sub['id'] ?>" style="padding:6px 14px;border:1px solid var(--primary);border-radius:6px;color:var(--primary);text-decoration:none;font-size:13px;">Manage Content</a>
-                                        <button onclick='editSubject(<?= json_encode($sub) ?>)' style="padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:#fff;cursor:pointer;font-size:13px;">Edit</button>
-                                        <a href="api/delete_subject.php?id=<?= $sub['id'] ?>" style="padding:6px 14px;border:1px solid var(--danger);border-radius:6px;color:var(--danger);text-decoration:none;font-size:13px;" onclick="return confirm('ลบรายวิชานี้ใช่ไหม?')">Delete</a>
+                                        <a href="student_enrollments.php?subject_id=<?= $sub['id'] ?>" style="padding:6px 14px;border:1px solid #10B981;border-radius:6px;color:#10B981;text-decoration:none;font-size:13px;"><?= __('Enroll Students') ?></a>
+                                        <a href="course_content.php?id=<?= $sub['id'] ?>" style="padding:6px 14px;border:1px solid var(--primary);border-radius:6px;color:var(--primary);text-decoration:none;font-size:13px;"><?= __('Manage Content') ?></a>
+                                        <button onclick='editSubject(<?= json_encode($sub) ?>)' style="padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:#fff;cursor:pointer;font-size:13px;"><?= __('Edit') ?></button>
+                                        <a href="api/delete_subject.php?id=<?= $sub['id'] ?>" style="padding:6px 14px;border:1px solid var(--danger);border-radius:6px;color:var(--danger);text-decoration:none;font-size:13px;" onclick="return confirm('<?= __('Delete this course?') ?>')"><?= __('Delete') ?></a>
                                     </div>
                                 </td>
                             </tr>
@@ -179,7 +179,7 @@ if ($cat_filter) {
                             <tr>
                                 <td colspan="6" style="text-align:center;padding:60px;color:var(--text-muted);">
                                     <span class="material-symbols-rounded" style="font-size:48px;display:block;margin-bottom:12px;opacity:0.4;">book</span>
-                                    ยังไม่มีคอร์สเรียน กด "Add Course" เพื่อเพิ่มคอร์สใหม่
+                                    <?= __('No courses available') ?>
                                 </td>
                             </tr>
                             <?php endif; ?>
@@ -194,34 +194,34 @@ if ($cat_filter) {
     <!-- Subject Modal -->
     <div class="modal-overlay" id="subjectModal">
         <div class="modal-box">
-            <h3 id="modalTitle">Add New Course</h3>
+            <h3 id="modalTitle"><?= __('Add New Course') ?></h3>
             <form action="api/save_subject.php" method="POST">
                 <input type="hidden" name="id" id="subject_id">
                 <div class="form-group">
-                    <label>รหัสคอร์ส (เช่น PHY101)</label>
+                    <label><?= __('Course Code') ?></label>
                     <input type="text" name="code" id="subject_code" placeholder="PHY101" required>
                 </div>
                 <div class="form-group">
-                    <label>ชื่อคอร์สเรียน</label>
+                    <label><?= __('Course Name') ?></label>
                     <input type="text" name="name" id="subject_name" placeholder="ฟิสิกส์ ม.5/1" required>
                 </div>
                 <div class="form-group">
-                    <label>หมวดหมู่หลัก (Category)</label>
+                    <label><?= __('Main Category') ?></label>
                     <select name="category_id" id="subject_category" onchange="loadSubcategories(this.value)">
-                        <option value="">- ไม่มี -</option>
+                        <option value=""><?= __('- None -') ?></option>
                         <?php foreach($main_categories as $mcat): ?>
                             <option value="<?= $mcat['id'] ?>"><?= htmlspecialchars($mcat['name']) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
                 <div class="form-group" id="subcat_group" style="display:none;">
-                    <label>หมวดหมู่ย่อย (Sub Category)</label>
+                    <label><?= __('Sub Category') ?></label>
                     <select name="subcategory_id" id="subject_subcategory">
-                        <option value="">- ไม่มี -</option>
+                        <option value=""><?= __('- None -') ?></option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>รูปแบบการเรียนการสอน (Course Type)</label>
+                    <label><?= __('Course Type') ?></label>
                     <div style="display:flex; gap:16px; margin-top:8px;">
                         <label style="font-weight:normal; font-size:14px; display:flex; align-items:center; gap:6px;">
                             <input type="checkbox" name="is_online" id="subject_is_online" value="1" style="width:auto; height:auto; margin:0;"> Online
@@ -232,12 +232,12 @@ if ($cat_filter) {
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>คำอธิบาย (ไม่บังคับ)</label>
-                    <textarea name="description" id="subject_desc" rows="3" placeholder="รายละเอียดคอร์ส..."></textarea>
+                    <label><?= __('Description (Optional)') ?></label>
+                    <textarea name="description" id="subject_desc" rows="3" placeholder="<?= __('Course details...') ?>"></textarea>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" onclick="closeModal()" style="padding:10px 20px;border:1px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;font-weight:600;">ยกเลิก</button>
-                    <button type="submit" style="padding:10px 20px;border:none;border-radius:8px;background:var(--primary);color:#fff;cursor:pointer;font-weight:600;">บันทึก</button>
+                    <button type="button" onclick="closeModal()" style="padding:10px 20px;border:1px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;font-weight:600;"><?= __('Cancel') ?></button>
+                    <button type="submit" style="padding:10px 20px;border:none;border-radius:8px;background:var(--primary);color:#fff;cursor:pointer;font-weight:600;"><?= __('Save') ?></button>
                 </div>
             </form>
         </div>
@@ -277,7 +277,7 @@ if ($cat_filter) {
         }
 
         function openSubjectModal() {
-            document.getElementById('modalTitle').innerText = 'Add New Course';
+            document.getElementById('modalTitle').innerText = '<?= __('Add New Course') ?>';
             document.getElementById('subject_id').value = '';
             document.getElementById('subject_code').value = '';
             document.getElementById('subject_name').value = '';
@@ -290,7 +290,7 @@ if ($cat_filter) {
             document.getElementById('subjectModal').classList.add('active');
         }
         function editSubject(s) {
-            document.getElementById('modalTitle').innerText = 'Edit Course';
+            document.getElementById('modalTitle').innerText = '<?= __('Edit Course') ?>';
             document.getElementById('subject_id').value = s.id;
             document.getElementById('subject_code').value = s.code;
             document.getElementById('subject_name').value = s.name;
