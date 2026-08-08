@@ -10,18 +10,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $rfid_tag     = trim($_POST['rfid_tag'] ?? '') ?: null;
     $status       = 'enrolled';
 
-    if (!$first_name || !$last_name || !$student_code) {
+    if (!$first_name || !$last_name) {
         header("Location: ../students.php?error=missing_fields");
         exit;
     }
 
-    // Check code not taken
-    $check = $pdo->prepare("SELECT id FROM students WHERE student_code = :c");
-    $check->execute(['c' => $student_code]);
-    if ($check->fetch()) {
-        header("Location: ../students.php?error=code_taken");
-        exit;
-    }
+    // Generate student_code like STU-001 right before insert to prevent race conditions
+    $stmt_code = $pdo->query("SELECT student_code FROM students WHERE student_code LIKE 'STU-%' ORDER BY CAST(SUBSTRING(student_code, 5) AS UNSIGNED) DESC LIMIT 1");
+    $last_code = $stmt_code->fetchColumn();
+    $next_num = $last_code ? ((int)substr($last_code, 4)) + 1 : 1;
+    $student_code = 'STU-' . str_pad($next_num, 3, '0', STR_PAD_LEFT);
 
     $stmt = $pdo->prepare("
         INSERT INTO students (student_code, first_name, last_name, rfid_tag, grade, program, status)

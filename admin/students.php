@@ -7,9 +7,15 @@ $stmt = $pdo->query("
     SELECT s.*, 
            (SELECT name FROM subjects subj JOIN enrollments e ON e.subject_id = subj.id WHERE e.student_id = s.id LIMIT 1) as primary_subject
     FROM students s
-    ORDER BY s.first_name ASC
+    ORDER BY s.student_code ASC
 ");
 $students = $stmt->fetchAll();
+
+// Get next student code
+$stmt_code = $pdo->query("SELECT student_code FROM students WHERE student_code LIKE 'STU-%' ORDER BY CAST(SUBSTRING(student_code, 5) AS UNSIGNED) DESC LIMIT 1");
+$last_code = $stmt_code->fetchColumn();
+$next_num = $last_code ? ((int)substr($last_code, 4)) + 1 : 1;
+$next_student_code = 'STU-' . str_pad($next_num, 3, '0', STR_PAD_LEFT);
 
 // Determine selected student
 $selected_id = isset($_GET['id']) ? (int)$_GET['id'] : (count($students) > 0 ? $students[0]['id'] : 0);
@@ -252,7 +258,8 @@ if ($selected_id) {
                 
                 <div class="form-group" style="margin-bottom:12px;">
                     <label>Student Code *</label>
-                    <input type="text" name="student_code" required style="width:100%; padding:10px; border:1px solid var(--border); border-radius:8px;" placeholder="e.g. S1001">
+                    <input type="text" name="student_code" value="<?= htmlspecialchars($next_student_code) ?>" readonly style="width:100%; padding:10px; border:1px solid var(--border); border-radius:8px; background:#F1F5F9; color:#64748B; cursor:not-allowed;">
+                    <div style="font-size:12px; color:#94A3B8; margin-top:4px;">รหัสนักเรียนถูกสร้างอัตโนมัติ</div>
                 </div>
                 
                 <div class="form-group" style="margin-bottom:12px;">
