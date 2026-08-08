@@ -10,6 +10,29 @@ $stmt = $pdo->query("
     ORDER BY s.first_name ASC
 ");
 $students = $stmt->fetchAll();
+
+// Determine selected student
+$selected_id = isset($_GET['id']) ? (int)$_GET['id'] : (count($students) > 0 ? $students[0]['id'] : 0);
+
+$selected_student = null;
+$enrolled_subjects = [];
+
+if ($selected_id) {
+    // Fetch selected student details
+    $stmt = $pdo->prepare("SELECT * FROM students WHERE id = :id");
+    $stmt->execute(['id' => $selected_id]);
+    $selected_student = $stmt->fetch();
+    
+    // Fetch enrolled subjects for selected student
+    $stmt = $pdo->prepare("
+        SELECT sub.id, sub.code, sub.name, sub.is_online, sub.is_onsite
+        FROM enrollments e
+        JOIN subjects sub ON e.subject_id = sub.id
+        WHERE e.student_id = :sid
+    ");
+    $stmt->execute(['sid' => $selected_id]);
+    $enrolled_subjects = $stmt->fetchAll();
+}
 ?>
 <!DOCTYPE html>
 <html lang="th">
@@ -69,9 +92,9 @@ $students = $stmt->fetchAll();
                             <?php foreach($students as $idx => $student): 
                                 $initials = getInitials($student['first_name'], $student['last_name']);
                                 $color = getAvatarColor($student['first_name']);
-                                $isActive = ($idx === 1); // Mock second item as selected
+                                $isActive = ($student['id'] == $selected_id);
                             ?>
-                            <tr style="<?= $isActive ? 'background:#F8FAFC;' : '' ?>">
+                            <tr style="cursor: pointer; <?= $isActive ? 'background:#F8FAFC;' : '' ?>" onclick="window.location.href='students.php?id=<?= $student['id'] ?>'">
                                 <td>
                                     <div style="display:flex; align-items:center; gap:12px;">
                                         <?php if($isActive): ?>
@@ -117,12 +140,19 @@ $students = $stmt->fetchAll();
 
                 <!-- Right Pane: Details -->
                 <div class="profile-pane">
+                    <?php if ($selected_student): ?>
                     <div class="profile-card">
                         <div class="profile-card-header"></div>
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&q=80" alt="Elena" class="profile-card-img">
+                        <?php
+                            $s_initials = getInitials($selected_student['first_name'], $selected_student['last_name']);
+                            $s_color = getAvatarColor($selected_student['first_name']);
+                        ?>
+                        <div class="profile-card-img" style="background:<?= $s_color ?>; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:40px; border:4px solid #fff;">
+                            <?= $s_initials ?>
+                        </div>
                         <div class="profile-card-body">
-                            <div class="profile-card-name">Elena Rodriguez</div>
-                            <div class="profile-card-meta">S0002 &bull; Junior Year</div>
+                            <div class="profile-card-name"><?= htmlspecialchars($selected_student['first_name'].' '.$selected_student['last_name']) ?></div>
+                            <div class="profile-card-meta"><?= htmlspecialchars($selected_student['student_code']) ?></div>
                             
                             <div class="profile-card-actions">
                                 <button class="btn" style="flex:1; padding:10px; border-radius:8px; background:#F1F5F9; color:#0F172A; border:none; font-weight:600;"><?= __('Add Subject') ?></button>
@@ -134,34 +164,49 @@ $students = $stmt->fetchAll();
 
                     <div class="subjects-card">
                         <h3><?= __('ENROLLED SUBJECTS') ?></h3>
-                        <div class="subject-item">
-                            <div>
-                                <div style="font-weight:700; font-size:14px; color:#0F172A;">Physics 101</div>
-                                <div style="font-size:12px; color:#64748B; margin-top:2px;">Prof. Davis &bull; Room 302</div>
+                        <?php if (empty($enrolled_subjects)): ?>
+                            <div style="padding:20px; text-align:center; color:#94A3B8; font-size:14px;">
+                                ไม่มีรายวิชาที่ลงทะเบียน
                             </div>
-                            <span class="material-symbols-rounded" style="color:#16A34A;">check_circle</span>
-                        </div>
-                        <div class="subject-item">
-                            <div>
-                                <div style="font-weight:700; font-size:14px; color:#0F172A;">Calculus II</div>
-                                <div style="font-size:12px; color:#64748B; margin-top:2px;">Prof. Smith &bull; Room 105</div>
+                        <?php else: ?>
+                            <?php foreach ($enrolled_subjects as $sub): ?>
+                            <div class="subject-item">
+                                <div>
+                                    <div style="font-weight:700; font-size:14px; color:#0F172A;"><?= htmlspecialchars($sub['code'] . ' - ' . $sub['name']) ?></div>
+                                    <div style="font-size:12px; color:#64748B; margin-top:2px;">
+                                        <?php 
+                                        $types = [];
+                                        if ($sub['is_online']) $types[] = 'Online';
+                                        if ($sub['is_onsite']) $types[] = 'Onsite';
+                                        echo implode(' / ', $types);
+                                        ?>
+                                    </div>
+                                </div>
+                                <span class="material-symbols-rounded" style="color:#16A34A;">check_circle</span>
                             </div>
-                            <span class="material-symbols-rounded" style="color:#16A34A;">check_circle</span>
-                        </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </div>
 
                     <div class="status-cards">
                         <div class="status-card">
-                            <span class="material-symbols-rounded" style="color:#D97706;">payments</span>
+                            <span class="material-symbols-rounded" style="color:#16A34A;">payments</span>
                             <div class="status-card-title"><?= __('Payment Status') ?></div>
-                            <div class="status-card-value" style="color:#D97706;"><?= __('Unpaid') ?></div>
+                            <div class="status-card-value" style="color:#16A34A;">Paid (Mock)</div>
                         </div>
                         <div class="status-card">
-                            <span class="material-symbols-rounded" style="color:#16A34A;">badge</span>
+                            <span class="material-symbols-rounded" style="<?= $selected_student['rfid_tag'] ? 'color:#16A34A;' : 'color:#94A3B8;' ?>">badge</span>
                             <div class="status-card-title"><?= __('RFID Card') ?></div>
-                            <div class="status-card-value" style="color:#16A34A;"><?= __('Linked') ?></div>
+                            <div class="status-card-value" style="<?= $selected_student['rfid_tag'] ? 'color:#16A34A;' : 'color:#94A3B8;' ?>">
+                                <?= $selected_student['rfid_tag'] ? __('Linked') : 'Not Linked' ?>
+                            </div>
                         </div>
                     </div>
+                    <?php else: ?>
+                        <div style="display:flex; align-items:center; justify-content:center; height:100%; color:#94A3B8;">
+                            กรุณาเลือกนักเรียนจากรายชื่อด้านซ้าย
+                        </div>
+                    <?php endif; ?>
                 </div>
 
             </div>
