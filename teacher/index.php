@@ -63,12 +63,7 @@ $initials = strtoupper(mb_substr($teacher['first_name'] ?? 'T', 0, 1) . mb_subst
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Inter', 'Noto Sans Thai', -apple-system, sans-serif;
-            background: #FAFAFC;
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(219, 234, 254, 0.4) 0px, transparent 50%),
-                radial-gradient(at 100% 0%, rgba(224, 231, 255, 0.5) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(243, 232, 255, 0.4) 0px, transparent 50%);
-            background-attachment: fixed;
+            background: #F4F6F8;
             color: #111827;
             line-height: 1.5;
             -webkit-font-smoothing: antialiased;
@@ -138,25 +133,27 @@ $initials = strtoupper(mb_substr($teacher['first_name'] ?? 'T', 0, 1) . mb_subst
         
         /* ── Main Highlight Card (Like Revenue) ── */
         .main-card {
-            background: #fff;
+            background: #2563EB;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.15);
+            border: none;
         }
         .main-card::after {
             content: ''; position: absolute;
             top: 0; right: 0; width: 150px; height: 150px;
-            background: radial-gradient(circle, rgba(79, 70, 229, 0.08) 0%, rgba(255,255,255,0) 70%);
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 70%);
             border-radius: 50%; pointer-events: none;
         }
-        .mc-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
-        .mc-title { font-size: 11px; font-weight: 700; color: #6B7280; letter-spacing: 0.5px; text-transform: uppercase; }
+        .mc-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; position: relative; z-index: 2; }
+        .mc-title { font-size: 11px; font-weight: 700; color: #93C5FD; letter-spacing: 0.5px; text-transform: uppercase; }
         .mc-icon {
             width: 32px; height: 32px; border-radius: 8px;
-            background: #EFF6FF; color: #2563EB;
+            color: #FFFFFF; border: 1px solid rgba(255,255,255,0.3);
             display: flex; align-items: center; justify-content: center;
         }
-        .mc-value { font-size: 36px; font-weight: 800; color: #111827; line-height: 1.1; margin-bottom: 4px; }
-        .mc-trend { font-size: 12px; font-weight: 600; color: #10B981; display: flex; align-items: center; gap: 4px; margin-bottom: 24px; }
+        .mc-value { font-size: 36px; font-weight: 800; color: #FFFFFF; line-height: 1.1; margin-bottom: 4px; position: relative; z-index: 2; }
+        .mc-trend { font-size: 12px; font-weight: 600; color: #10B981; display: flex; align-items: center; gap: 4px; margin-bottom: 24px; position: relative; z-index: 2; }
         .mc-trend .material-symbols-rounded { font-size: 14px; }
         
         .mc-chart { display: flex; align-items: flex-end; gap: 4px; height: 40px; margin-top: 10px; }
@@ -263,12 +260,20 @@ $initials = strtoupper(mb_substr($teacher['first_name'] ?? 'T', 0, 1) . mb_subst
         }
         .nav-item {
             display: flex; flex-direction: column; align-items: center; gap: 2px;
-            font-size: 11px; font-weight: 600; color: #6B7280;
+            font-size: 11px; font-weight: 600; color: #9CA3AF;
             padding: 8px 16px; border-radius: 12px; text-decoration: none;
         }
-        .nav-item .material-symbols-rounded { font-size: 22px; margin-bottom: 2px; }
+        .nav-item .material-symbols-rounded { 
+            font-size: 24px; margin-bottom: 2px; transition: 0.2s;
+        }
         .nav-item.on {
-            background: #EFF6FF; color: #2563EB;
+            color: #2563EB;
+        }
+        .nav-item.on .material-symbols-rounded {
+            background: #2563EB;
+            color: #fff;
+            padding: 4px 16px;
+            border-radius: 20px;
         }
     </style>
 </head>
@@ -300,11 +305,11 @@ $initials = strtoupper(mb_substr($teacher['first_name'] ?? 'T', 0, 1) . mb_subst
                 <span class="material-symbols-rounded" style="font-size:20px;">school</span>
             </div>
         </div>
-        <div class="mc-value"><?= $total_classes ?> <span style="font-size:14px; color:#6B7280; font-weight:600;">คาบ</span></div>
+        <div class="mc-value"><?= $total_classes ?> <span style="font-size:14px; color:#BFDBFE; font-weight:600;">คาบ</span></div>
         
         <div class="mc-class-list">
             <?php if (empty($schedules)): ?>
-                <div style="font-size:12px; color:#6B7280;">ไม่มีสอนในวันนี้</div>
+                <div style="font-size:12px; color:#BFDBFE;">ไม่มีสอนในวันนี้</div>
             <?php else: ?>
                 <?php foreach(array_slice($schedules, 0, 3) as $sch): ?>
                 <div class="mc-class-item">
