@@ -248,33 +248,6 @@ $initials = strtoupper(mb_substr($teacher['first_name'] ?? 'T', 0, 1) . mb_subst
             border-radius: 12px; border: 1px dashed #D1D5DB;
         }
         .empty h4 { font-size: 14px; color: #6B7280; font-weight: 600; }
-
-        /* ── Bottom Nav ── */
-        .bottom-nav {
-            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
-            width: 100%; max-width: 460px;
-            background: #fff; border-top: 1px solid #E5E7EB;
-            display: flex; justify-content: space-around; align-items: center;
-            padding: 8px 12px max(env(safe-area-inset-bottom), 12px);
-            z-index: 100;
-        }
-        .nav-item {
-            display: flex; flex-direction: column; align-items: center; gap: 2px;
-            font-size: 11px; font-weight: 600; color: #9CA3AF;
-            padding: 8px 16px; border-radius: 12px; text-decoration: none;
-        }
-        .nav-item .material-symbols-rounded { 
-            font-size: 24px; margin-bottom: 2px; transition: 0.2s;
-        }
-        .nav-item.on {
-            color: #2563EB;
-        }
-        .nav-item.on .material-symbols-rounded {
-            background: #2563EB;
-            color: #fff;
-            padding: 4px 16px;
-            border-radius: 20px;
-        }
     </style>
 </head>
 <body>
@@ -440,30 +413,7 @@ $initials = strtoupper(mb_substr($teacher['first_name'] ?? 'T', 0, 1) . mb_subst
         <?php endforeach; ?>
     <?php endif; ?>
 
-    <!-- Bottom Nav -->
-    <nav class="bottom-nav">
-        <a href="index.php" class="nav-item on">
-            <span class="material-symbols-rounded">dashboard</span>
-            Home
-        </a>
-        <a href="schedule.php" class="nav-item">
-            <span class="material-symbols-rounded">calendar_today</span>
-            Schedule
-        </a>
-        <a href="roster.php" class="nav-item">
-            <span class="material-symbols-rounded">school</span>
-            Students
-        </a>
-        <a href="leave.php" class="nav-item">
-            <span class="material-symbols-rounded">badge</span>
-            Staff
-        </a>
-        <a href="earnings.php" class="nav-item">
-            <span class="material-symbols-rounded">payments</span>
-            Finance
-        </a>
-    </nav>
-
+    <?php include 'includes/bottom_nav.php'; ?>
 </div>
 </body>
 </html>
