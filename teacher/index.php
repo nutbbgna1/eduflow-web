@@ -63,14 +63,23 @@ $initials = strtoupper(mb_substr($teacher['first_name'] ?? 'T', 0, 1) . mb_subst
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Inter', 'Noto Sans Thai', -apple-system, sans-serif;
-            background: #FAFAFC; /* Light purplish-gray background from image */
+            background: #FAFAFC;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(219, 234, 254, 0.4) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(224, 231, 255, 0.5) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(243, 232, 255, 0.4) 0px, transparent 50%);
+            background-attachment: fixed;
             color: #111827;
             line-height: 1.5;
             -webkit-font-smoothing: antialiased;
         }
         a { text-decoration: none; color: inherit; }
 
-        .shell { max-width: 460px; margin: 0 auto; min-height: 100vh; background: #FAFAFC; padding-bottom: 90px; }
+        .shell { 
+            max-width: 460px; margin: 0 auto; min-height: 100vh; 
+            padding-bottom: 90px; 
+            background: transparent;
+        }
 
         /* ── Header ── */
         .top-nav {
@@ -78,8 +87,11 @@ $initials = strtoupper(mb_substr($teacher['first_name'] ?? 'T', 0, 1) . mb_subst
             justify-content: space-between;
             align-items: center;
             padding: 16px 20px;
-            background: #fff;
-            border-bottom: 1px solid #E5E7EB;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+            position: sticky; top: 0; z-index: 50;
         }
         .nav-avatar {
             width: 32px; height: 32px; border-radius: 50%;
