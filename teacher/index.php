@@ -71,8 +71,7 @@ $initials = strtoupper(mb_substr($teacher['first_name'] ?? 'T', 0, 1) . mb_subst
         a { text-decoration: none; color: inherit; }
 
         .shell { 
-            max-width: 460px; margin: 0 auto; min-height: 100vh; 
-             
+            max-width: 480px; margin: 0 auto; min-height: 100vh; 
             background: transparent;
         }
 

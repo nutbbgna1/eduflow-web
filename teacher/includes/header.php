@@ -13,7 +13,7 @@ $h_colors = ['#2563EB','#3B82F6','#EC4899','#10B981','#F59E0B','#06B6D4','#EF444
 $h_char = $h_teacher['first_name'] ?? 'T';
 $h_color = $h_colors[ctype_alpha($h_char[0] ?? 'T') ? ord(strtoupper($h_char[0])) % count($h_colors) : 0];
 ?>
-<header style="display:flex; justify-content:space-between; align-items:center; padding:16px 20px 8px; background:var(--background, #F1F5F9);">
+<header style="display:flex; justify-content:space-between; align-items:center; padding:16px 20px 8px; background:#F4F6F8; position: sticky; top: 0; z-index: 50;">
     <div style="display:flex; align-items:center; gap:12px;">
         <a href="index.php" style="display:flex; align-items:center; gap:8px; text-decoration:none; color:inherit;">
             <span class="material-symbols-rounded" style="font-size:24px; color:#2563EB;">arrow_back</span>
