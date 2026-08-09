@@ -16,10 +16,6 @@ $thai_months = ['01'=>'มกราคม','02'=>'กุมภาพันธ์
 $display_date = date('j') . ' ' . $thai_months[date('m')] . ' ' . (date('Y') + 543);
 $display_day = 'วัน' . $thai_days[date('l')];
 
-if ($current_hour < 12) $greeting = 'สวัสดีตอนเช้า';
-elseif ($current_hour < 17) $greeting = 'สวัสดีตอนบ่าย';
-else $greeting = 'สวัสดีตอนเย็น';
-
 // Fetch schedules for today
 $current_month = date('Y-m');
 $stmt = $pdo->prepare("
@@ -67,310 +63,367 @@ $initials = strtoupper(mb_substr($teacher['first_name'] ?? 'T', 0, 1) . mb_subst
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Inter', 'Noto Sans Thai', -apple-system, sans-serif;
-            background: #EEF0F8;
+            background: #FAFAFC; /* Light purplish-gray background from image */
             color: #111827;
             line-height: 1.5;
             -webkit-font-smoothing: antialiased;
         }
         a { text-decoration: none; color: inherit; }
 
-        .shell { max-width: 460px; margin: 0 auto; min-height: 100vh; background: #EEF0F8; padding-bottom: 80px; }
+        .shell { max-width: 460px; margin: 0 auto; min-height: 100vh; background: #FAFAFC; padding-bottom: 90px; }
 
         /* ── Header ── */
-        .header {
-            padding: 20px 20px 12px;
-            display: flex; justify-content: space-between; align-items: center;
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            background: #fff;
+            border-bottom: 1px solid #E5E7EB;
         }
-        .header-left { display: flex; align-items: center; gap: 14px; }
-        .avatar {
-            width: 44px; height: 44px; border-radius: 50%;
+        .nav-avatar {
+            width: 32px; height: 32px; border-radius: 50%;
             background: #2563EB; color: #fff;
             display: flex; align-items: center; justify-content: center;
-            font-size: 16px; font-weight: 700;
+            font-size: 13px; font-weight: 700;
         }
-        .header-text h2 { font-size: 16px; font-weight: 700; line-height: 1.3; }
-        .header-text p { font-size: 12px; color: #6B7280; font-weight: 500; }
-        .header-actions { display: flex; gap: 8px; }
-        .header-btn {
-            width: 40px; height: 40px; border-radius: 50%;
-            border: 1px solid #E5E7EB; background: #fff;
-            display: flex; align-items: center; justify-content: center;
-            color: #6B7280; cursor: pointer; transition: 0.15s;
+        .nav-logo {
+            font-size: 18px; font-weight: 800; color: #1D4ED8;
+            display: flex; align-items: center; gap: 4px;
         }
-        .header-btn:hover { border-color: #2563EB; color: #2563EB; }
-        .header-btn .material-symbols-rounded { font-size: 20px; }
+        .nav-bell {
+            position: relative; color: #4B5563;
+        }
+        .nav-bell::after {
+            content: ''; position: absolute;
+            top: 2px; right: 2px; width: 6px; height: 6px;
+            background: #EF4444; border-radius: 50%;
+            border: 1px solid #fff;
+        }
 
-        /* ── Date Bar ── */
-        .date-bar {
+        /* ── Page Header ── */
+        .page-header {
+            padding: 24px 20px 16px;
+        }
+        .page-header h1 {
+            font-size: 26px; font-weight: 700; color: #111827;
+            margin-bottom: 4px; letter-spacing: -0.5px;
+        }
+        .page-header p {
+            font-size: 14px; color: #6B7280;
+        }
+
+        /* ── Cards ── */
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px;
             margin: 0 20px 16px;
-            padding: 12px 16px;
-            background: #fff; border-radius: 12px;
-            display: flex; justify-content: space-between; align-items: center;
-            border: 1px solid #E5E7EB;
-        }
-        .date-bar-left { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #374151; }
-        .date-bar-left .material-symbols-rounded { font-size: 18px; color: #2563EB; }
-        .date-bar-right { font-size: 12px; color: #6B7280; font-weight: 500; }
-
-        /* ── Stats ── */
-        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 0 20px; margin-bottom: 20px; }
-        .stat-card {
-            background: #fff; border-radius: 12px; padding: 16px 14px;
-            text-align: center; border: 1px solid #E5E7EB;
-        }
-        .stat-num { font-size: 24px; font-weight: 800; color: #111827; line-height: 1; }
-        .stat-label { font-size: 11px; color: #6B7280; font-weight: 600; margin-top: 4px; }
-
-        /* ── Menu Grid ── */
-        .menu-title { padding: 0 20px; font-size: 15px; font-weight: 700; margin-bottom: 10px; color: #111827; }
-        .menu-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 0 20px; margin-bottom: 24px; }
-        .menu-item {
-            display: flex; flex-direction: column; align-items: center; gap: 6px;
-            padding: 14px 6px; border-radius: 12px;
-            background: #fff; border: 1px solid #E5E7EB;
-            transition: 0.15s;
-        }
-        .menu-item:hover { border-color: #2563EB; background: #EFF6FF; }
-        .menu-icon {
-            width: 40px; height: 40px; border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .menu-icon .material-symbols-rounded { font-size: 22px; }
-        .menu-label { font-size: 11px; font-weight: 600; color: #374151; text-align: center; }
-
-        /* ── Schedule Section ── */
-        .section-head {
-            padding: 0 20px; margin-bottom: 12px;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .section-head h3 { font-size: 15px; font-weight: 700; }
-        .section-head a { font-size: 13px; font-weight: 600; color: #2563EB; }
-
-        .sched-list { padding: 0 20px; }
-
-        .sched-card {
-            background: #fff; border-radius: 12px; padding: 16px;
-            margin-bottom: 10px; border: 1px solid #E5E7EB;
+            border: 1px solid #F3F4F6;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
             position: relative;
         }
-        .sched-card.now { border-color: #2563EB; border-width: 2px; }
-        .sched-card.done { opacity: 0.55; }
-        .sched-card.late { border-left: 4px solid #DC2626; }
-
-        .sched-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .sched-time { font-size: 13px; font-weight: 600; color: #6B7280; display: flex; align-items: center; gap: 4px; }
-        .sched-time .material-symbols-rounded { font-size: 16px; }
-
-        .tag {
-            font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 6px;
-            display: inline-flex; align-items: center; gap: 3px;
+        
+        /* ── Main Highlight Card (Like Revenue) ── */
+        .main-card {
+            background: #fff;
+            position: relative;
+            overflow: hidden;
         }
-        .tag .material-symbols-rounded { font-size: 14px; }
-        .tag-now { background: #DBEAFE; color: #1D4ED8; }
-        .tag-done { background: #DCFCE7; color: #16A34A; }
-        .tag-late { background: #FEE2E2; color: #DC2626; }
-        .tag-wait { background: #F3F4F6; color: #6B7280; }
-
-        .sched-subject { font-size: 15px; font-weight: 700; color: #111827; }
-        .sched-name { font-size: 13px; color: #6B7280; margin-top: 2px; }
-        .sched-room { font-size: 12px; color: #9CA3AF; margin-top: 6px; display: flex; align-items: center; gap: 4px; }
-        .sched-room .material-symbols-rounded { font-size: 15px; }
-
-        .sched-btn {
-            display: flex; align-items: center; justify-content: center; gap: 6px;
-            width: 100%; padding: 10px; margin-top: 12px;
-            border-radius: 8px; border: none;
-            font-size: 13px; font-weight: 600; cursor: pointer;
+        .main-card::after {
+            content: ''; position: absolute;
+            top: 0; right: 0; width: 150px; height: 150px;
+            background: radial-gradient(circle, rgba(79, 70, 229, 0.08) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%; pointer-events: none;
         }
-        .sched-btn .material-symbols-rounded { font-size: 18px; }
-        .btn-blue { background: #2563EB; color: #fff; }
-        .btn-blue:hover { background: #1D4ED8; }
-        .btn-gray { background: #F3F4F6; color: #9CA3AF; cursor: default; }
-        .btn-green { background: #DCFCE7; color: #16A34A; cursor: default; }
+        .mc-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .mc-title { font-size: 11px; font-weight: 700; color: #6B7280; letter-spacing: 0.5px; text-transform: uppercase; }
+        .mc-icon {
+            width: 32px; height: 32px; border-radius: 8px;
+            background: #EFF6FF; color: #2563EB;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .mc-value { font-size: 36px; font-weight: 800; color: #111827; line-height: 1.1; margin-bottom: 4px; }
+        .mc-trend { font-size: 12px; font-weight: 600; color: #10B981; display: flex; align-items: center; gap: 4px; margin-bottom: 24px; }
+        .mc-trend .material-symbols-rounded { font-size: 14px; }
+        
+        .mc-chart { display: flex; align-items: flex-end; gap: 4px; height: 40px; margin-top: 10px; }
+        .chart-bar { flex: 1; background: #BFDBFE; border-radius: 2px 2px 0 0; }
+        .chart-bar.active { background: #3B82F6; }
+
+        /* ── Small Stats Grid ── */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 0 20px 20px; }
+        .stat-card {
+            background: #fff; border-radius: 16px; padding: 16px;
+            border: 1px solid #F3F4F6; box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .sc-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .sc-title { font-size: 11px; font-weight: 700; color: #6B7280; letter-spacing: 0.5px; text-transform: uppercase; }
+        .sc-icon { color: #2563EB; }
+        .sc-icon.orange { color: #F59E0B; }
+        .sc-value { font-size: 20px; font-weight: 700; color: #111827; margin-bottom: 4px; }
+        .sc-sub { font-size: 11px; color: #6B7280; }
+
+        /* ── Distribution Card (Main Menu) ── */
+        .dist-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .dist-title { font-size: 16px; font-weight: 700; color: #111827; }
+        .dist-link { font-size: 13px; font-weight: 600; color: #2563EB; }
+
+        .menu-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 8px; }
+        .menu-item {
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+            padding: 8px 4px;
+        }
+        .menu-icon {
+            width: 44px; height: 44px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            background: #F3F4F6; color: #4B5563; transition: 0.2s;
+        }
+        .menu-item:hover .menu-icon { background: #EFF6FF; color: #2563EB; }
+        .menu-label { font-size: 11px; font-weight: 600; color: #374151; text-align: center; }
+
+        /* ── Schedule List (Like Pending Leave Requests) ── */
+        .list-section-title {
+            padding: 0 20px; margin: 24px 0 12px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .list-section-title h3 { font-size: 18px; font-weight: 700; color: #111827; }
+        .list-badge {
+            background: #FFEDD5; color: #EA580C;
+            font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px;
+        }
+
+        .list-card {
+            background: #fff; border-radius: 12px; padding: 16px;
+            margin: 0 20px 12px;
+            border-left: 4px solid #F59E0B; /* Orange accent */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            display: flex; justify-content: space-between; align-items: center;
+            text-decoration: none; color: inherit;
+        }
+        .list-card.active { border-left-color: #2563EB; }
+        .list-card.done { border-left-color: #10B981; opacity: 0.7; }
+        
+        .lc-left { display: flex; align-items: center; gap: 12px; }
+        .lc-avatar {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: #F3F4F6; color: #6B7280;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .lc-avatar .material-symbols-rounded { font-size: 20px; }
+        .lc-info h4 { font-size: 14px; font-weight: 700; color: #111827; margin-bottom: 2px; }
+        .lc-info p { font-size: 12px; color: #6B7280; }
+        .lc-arrow {
+            width: 32px; height: 32px; border-radius: 50%;
+            background: #F3F4F6; color: #6B7280;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .lc-arrow .material-symbols-rounded { font-size: 18px; }
 
         /* ── Empty ── */
         .empty {
-            text-align: center; padding: 40px 20px;
+            text-align: center; padding: 30px 20px;
             margin: 0 20px; background: #fff;
-            border-radius: 12px; border: 1px solid #E5E7EB;
+            border-radius: 12px; border: 1px dashed #D1D5DB;
         }
-        .empty .material-symbols-rounded { font-size: 40px; color: #D1D5DB; margin-bottom: 8px; }
         .empty h4 { font-size: 14px; color: #6B7280; font-weight: 600; }
-        .empty p { font-size: 12px; color: #9CA3AF; margin-top: 4px; }
 
         /* ── Bottom Nav ── */
         .bottom-nav {
             position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
             width: 100%; max-width: 460px;
             background: #fff; border-top: 1px solid #E5E7EB;
-            display: flex; justify-content: space-around;
-            padding: 6px 0 max(env(safe-area-inset-bottom), 10px);
+            display: flex; justify-content: space-around; align-items: center;
+            padding: 8px 12px max(env(safe-area-inset-bottom), 12px);
             z-index: 100;
         }
         .nav-item {
             display: flex; flex-direction: column; align-items: center; gap: 2px;
-            font-size: 10px; font-weight: 600; color: #9CA3AF;
-            padding: 6px 12px; border-radius: 10px; transition: 0.15s;
+            font-size: 11px; font-weight: 600; color: #6B7280;
+            padding: 8px 16px; border-radius: 12px; text-decoration: none;
         }
-        .nav-item .material-symbols-rounded { font-size: 22px; }
-        .nav-item.on { color: #2563EB; }
+        .nav-item .material-symbols-rounded { font-size: 22px; margin-bottom: 2px; }
+        .nav-item.on {
+            background: #EFF6FF; color: #2563EB;
+        }
     </style>
 </head>
 <body>
 <div class="shell">
 
-    <!-- Header -->
-    <div class="header">
-        <div class="header-left">
-            <div class="avatar"><?= $initials ?></div>
-            <div class="header-text">
-                <p><?= $greeting ?></p>
-                <h2><?= $teacher_name ?></h2>
+    <!-- Top Bar -->
+    <div class="top-nav">
+        <div class="nav-avatar"><?= $initials ?></div>
+        <div class="nav-logo">
+            EduFlow
+        </div>
+        <div class="nav-bell">
+            <span class="material-symbols-rounded">notifications</span>
+        </div>
+    </div>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1>Overview</h1>
+        <p>Your daily administrative summary.</p>
+    </div>
+
+    <!-- Main Highlight Card -->
+    <div class="card main-card">
+        <div class="mc-header">
+            <div class="mc-title">TODAY'S CLASSES</div>
+            <div class="mc-icon">
+                <span class="material-symbols-rounded" style="font-size:20px;">school</span>
             </div>
         </div>
-        <div class="header-actions">
-            <a href="schedule.php" class="header-btn"><span class="material-symbols-rounded">calendar_month</span></a>
-            <a href="../logout.php" class="header-btn" style="color:#DC2626;border-color:#FEE2E2;"><span class="material-symbols-rounded">logout</span></a>
+        <div class="mc-value"><?= $total_classes ?></div>
+        <div class="mc-trend">
+            <span class="material-symbols-rounded">trending_up</span> +<?= count($schedules) > 0 ? '100' : '0' ?>% from yesterday
+        </div>
+        
+        <div class="mc-chart">
+            <!-- Mock Bar Chart matching the image -->
+            <div class="chart-bar" style="height: 30%;"></div>
+            <div class="chart-bar" style="height: 40%;"></div>
+            <div class="chart-bar" style="height: 35%;"></div>
+            <div class="chart-bar" style="height: 60%;"></div>
+            <div class="chart-bar" style="height: 55%;"></div>
+            <div class="chart-bar active" style="height: 80%;"></div>
         </div>
     </div>
 
-    <!-- Date Bar -->
-    <div class="date-bar">
-        <div class="date-bar-left">
-            <span class="material-symbols-rounded">today</span>
-            <?= $display_day ?>, <?= $display_date ?>
-        </div>
-        <div class="date-bar-right"><?= $total_classes ?> คาบวันนี้</div>
-    </div>
-
-    <!-- Stats -->
-    <div class="stats">
+    <!-- Stats Grid -->
+    <div class="stats-grid">
         <div class="stat-card">
-            <div class="stat-num"><?= $total_classes ?></div>
-            <div class="stat-label">คาบวันนี้</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-num"><?= $total_subjects ?></div>
-            <div class="stat-label">วิชาที่สอน</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-num"><?= $total_students ?></div>
-            <div class="stat-label">นักเรียน</div>
-        </div>
-    </div>
-
-    <!-- Menu -->
-    <div class="menu-title">เมนู</div>
-    <div class="menu-grid">
-        <a href="schedule.php" class="menu-item">
-            <div class="menu-icon" style="background:#EFF6FF;color:#2563EB;"><span class="material-symbols-rounded">calendar_month</span></div>
-            <span class="menu-label">ตารางสอน</span>
-        </a>
-        <a href="roster.php" class="menu-item">
-            <div class="menu-icon" style="background:#ECFDF5;color:#10B981;"><span class="material-symbols-rounded">groups</span></div>
-            <span class="menu-label">รายชื่อ</span>
-        </a>
-        <a href="leave.php" class="menu-item">
-            <div class="menu-icon" style="background:#FEF3C7;color:#D97706;"><span class="material-symbols-rounded">event_busy</span></div>
-            <span class="menu-label">ลางาน</span>
-        </a>
-        <a href="earnings.php" class="menu-item">
-            <div class="menu-icon" style="background:#FEE2E2;color:#DC2626;"><span class="material-symbols-rounded">payments</span></div>
-            <span class="menu-label">รายได้</span>
-        </a>
-        <a href="materials.php" class="menu-item">
-            <div class="menu-icon" style="background:#F0FDFA;color:#0D9488;"><span class="material-symbols-rounded">menu_book</span></div>
-            <span class="menu-label">สื่อสอน</span>
-        </a>
-        <a href="assignments.php" class="menu-item">
-            <div class="menu-icon" style="background:#EFF6FF;color:#2563EB;"><span class="material-symbols-rounded">assignment</span></div>
-            <span class="menu-label">การบ้าน</span>
-        </a>
-        <a href="grading.php" class="menu-item">
-            <div class="menu-icon" style="background:#FEF3C7;color:#D97706;"><span class="material-symbols-rounded">grading</span></div>
-            <span class="menu-label">ให้คะแนน</span>
-        </a>
-        <a href="profile.php" class="menu-item">
-            <div class="menu-icon" style="background:#F3F4F6;color:#6B7280;"><span class="material-symbols-rounded">person</span></div>
-            <span class="menu-label">โปรไฟล์</span>
-        </a>
-    </div>
-
-    <!-- Schedule -->
-    <div class="section-head">
-        <h3>ตารางสอนวันนี้</h3>
-        <?php if(!empty($schedules)): ?>
-            <a href="schedule.php">ดูทั้งหมด</a>
-        <?php endif; ?>
-    </div>
-
-    <div class="sched-list">
-        <?php if(empty($schedules)): ?>
-            <div class="empty">
-                <span class="material-symbols-rounded">event_available</span>
-                <h4>ไม่มีคาบสอนวันนี้</h4>
-                <p>พักผ่อน หรือเตรียมการสอนสำหรับวันถัดไป</p>
-            </div>
-        <?php else: ?>
-            <?php foreach($schedules as $schedule): ?>
-                <?php
-                    $is_completed = in_array($schedule['id'], $completed_logs);
-                    $start_ts = strtotime($schedule['start_time']);
-                    $end_ts = strtotime($schedule['end_time']);
-                    $curr_ts = strtotime($current_time);
-                    $start_minus_30 = $start_ts - (30 * 60);
-                    $end_plus_30 = $end_ts + (30 * 60);
-
-                    $state = 'waiting';
-                    if ($is_completed) $state = 'completed';
-                    elseif ($curr_ts >= $start_minus_30 && $curr_ts <= $end_plus_30) $state = 'active';
-                    elseif ($curr_ts > $end_plus_30) $state = 'missed';
-                ?>
-                <div class="sched-card <?= $state === 'active' ? 'now' : '' ?> <?= $state === 'completed' ? 'done' : '' ?> <?= $state === 'missed' ? 'late' : '' ?>">
-                    <div class="sched-row">
-                        <div class="sched-time">
-                            <span class="material-symbols-rounded">schedule</span>
-                            <?= date('H:i', $start_ts) ?> – <?= date('H:i', $end_ts) ?>
-                        </div>
-                        <?php if ($state === 'active'): ?>
-                            <span class="tag tag-now"><span class="material-symbols-rounded">radio_button_checked</span> กำลังสอน</span>
-                        <?php elseif ($state === 'completed'): ?>
-                            <span class="tag tag-done"><span class="material-symbols-rounded">check_circle</span> เสร็จสิ้น</span>
-                        <?php elseif ($state === 'missed'): ?>
-                            <span class="tag tag-late"><span class="material-symbols-rounded">error</span> เลยเวลา</span>
-                        <?php else: ?>
-                            <span class="tag tag-wait"><span class="material-symbols-rounded">hourglass_empty</span> รอ</span>
-                        <?php endif; ?>
-                    </div>
-                    <div class="sched-subject"><?= htmlspecialchars($schedule['subject_code']) ?></div>
-                    <div class="sched-name"><?= htmlspecialchars($schedule['subject_name']) ?></div>
-                    <div class="sched-room">
-                        <span class="material-symbols-rounded">meeting_room</span>
-                        ห้อง <?= htmlspecialchars($schedule['room'] ?? '-') ?>
-                    </div>
-                    <?php if ($state === 'active'): ?>
-                        <a href="attendance.php?schedule_id=<?= $schedule['id'] ?>" class="sched-btn btn-blue">
-                            <span class="material-symbols-rounded">play_arrow</span> เริ่มสอน / เช็คชื่อ
-                        </a>
-                    <?php elseif ($state === 'completed'): ?>
-                        <div class="sched-btn btn-green"><span class="material-symbols-rounded">check</span> สอนเสร็จแล้ว</div>
-                    <?php elseif ($state === 'missed'): ?>
-                        <div class="sched-btn btn-gray">เลยกำหนดเวลา</div>
-                    <?php else: ?>
-                        <div class="sched-btn btn-gray">เช็คได้เวลา <?= date('H:i', $start_minus_30) ?></div>
-                    <?php endif; ?>
+            <div>
+                <div class="sc-header">
+                    <div class="sc-title">TOTAL<br>SUBJECTS</div>
+                    <span class="material-symbols-rounded sc-icon orange" style="font-size:20px;">menu_book</span>
                 </div>
-            <?php endforeach; ?>
+                <div class="sc-value"><?= $total_subjects ?></div>
+                <div class="sc-sub">Active terms</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div>
+                <div class="sc-header">
+                    <div class="sc-title">ACTIVE<br>STUDENTS</div>
+                    <span class="material-symbols-rounded sc-icon" style="font-size:20px;">school</span>
+                </div>
+                <div class="sc-value"><?= number_format($total_students) ?></div>
+                <div class="sc-sub">+45 this term</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Grid inside Card -->
+    <div class="card">
+        <div class="dist-header">
+            <div class="dist-title">Quick Actions</div>
+            <a href="profile.php" class="dist-link">View All</a>
+        </div>
+        <div class="menu-grid">
+            <a href="schedule.php" class="menu-item">
+                <div class="menu-icon"><span class="material-symbols-rounded">calendar_month</span></div>
+                <span class="menu-label">ตารางสอน</span>
+            </a>
+            <a href="roster.php" class="menu-item">
+                <div class="menu-icon"><span class="material-symbols-rounded">groups</span></div>
+                <span class="menu-label">รายชื่อ</span>
+            </a>
+            <a href="leave.php" class="menu-item">
+                <div class="menu-icon"><span class="material-symbols-rounded">event_busy</span></div>
+                <span class="menu-label">ลางาน</span>
+            </a>
+            <a href="earnings.php" class="menu-item">
+                <div class="menu-icon"><span class="material-symbols-rounded">payments</span></div>
+                <span class="menu-label">รายได้</span>
+            </a>
+            <a href="materials.php" class="menu-item">
+                <div class="menu-icon"><span class="material-symbols-rounded">menu_book</span></div>
+                <span class="menu-label">สื่อสอน</span>
+            </a>
+            <a href="assignments.php" class="menu-item">
+                <div class="menu-icon"><span class="material-symbols-rounded">assignment</span></div>
+                <span class="menu-label">การบ้าน</span>
+            </a>
+            <a href="grading.php" class="menu-item">
+                <div class="menu-icon"><span class="material-symbols-rounded">grading</span></div>
+                <span class="menu-label">ให้คะแนน</span>
+            </a>
+            <a href="profile.php" class="menu-item">
+                <div class="menu-icon"><span class="material-symbols-rounded">person</span></div>
+                <span class="menu-label">โปรไฟล์</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Today's Schedule -->
+    <div class="list-section-title">
+        <h3>Today's Schedule</h3>
+        <?php if($total_classes > 0): ?>
+            <span class="list-badge"><?= $total_classes ?> Classes</span>
         <?php endif; ?>
     </div>
+
+    <?php if(empty($schedules)): ?>
+        <div class="empty">
+            <h4>No classes scheduled for today.</h4>
+        </div>
+    <?php else: ?>
+        <?php foreach($schedules as $schedule): ?>
+            <?php
+                $is_completed = in_array($schedule['id'], $completed_logs);
+                $start_ts = strtotime($schedule['start_time']);
+                $end_ts = strtotime($schedule['end_time']);
+                $curr_ts = strtotime($current_time);
+                $start_minus_30 = $start_ts - (30 * 60);
+                $end_plus_30 = $end_ts + (30 * 60);
+
+                $state = 'wait'; // default yellow border
+                if ($is_completed) $state = 'done'; // green border
+                elseif ($curr_ts >= $start_minus_30 && $curr_ts <= $end_plus_30) $state = 'active'; // blue border
+            ?>
+            <a href="<?= ($state === 'active') ? 'attendance.php?schedule_id='.$schedule['id'] : '#' ?>" class="list-card <?= $state ?>">
+                <div class="lc-left">
+                    <div class="lc-avatar">
+                        <span class="material-symbols-rounded">menu_book</span>
+                    </div>
+                    <div class="lc-info">
+                        <h4><?= htmlspecialchars($schedule['subject_name']) ?></h4>
+                        <p><?= htmlspecialchars($schedule['subject_code']) ?> • <?= date('H:i', $start_ts) ?> - <?= date('H:i', $end_ts) ?></p>
+                    </div>
+                </div>
+                <div class="lc-arrow">
+                    <span class="material-symbols-rounded">chevron_right</span>
+                </div>
+            </a>
+        <?php endforeach; ?>
+    <?php endif; ?>
 
     <!-- Bottom Nav -->
     <nav class="bottom-nav">
-        <a href="index.php" class="nav-item on"><span class="material-symbols-rounded">home</span> หน้าหลัก</a>
-        <a href="schedule.php" class="nav-item"><span class="material-symbols-rounded">calendar_month</span> ตาราง</a>
-        <a href="leave.php" class="nav-item"><span class="material-symbols-rounded">event_busy</span> ลางาน</a>
-        <a href="earnings.php" class="nav-item"><span class="material-symbols-rounded">payments</span> รายได้</a>
-        <a href="profile.php" class="nav-item"><span class="material-symbols-rounded">person</span> โปรไฟล์</a>
+        <a href="index.php" class="nav-item on">
+            <span class="material-symbols-rounded">dashboard</span>
+            Home
+        </a>
+        <a href="schedule.php" class="nav-item">
+            <span class="material-symbols-rounded">calendar_today</span>
+            Schedule
+        </a>
+        <a href="roster.php" class="nav-item">
+            <span class="material-symbols-rounded">school</span>
+            Students
+        </a>
+        <a href="leave.php" class="nav-item">
+            <span class="material-symbols-rounded">badge</span>
+            Staff
+        </a>
+        <a href="earnings.php" class="nav-item">
+            <span class="material-symbols-rounded">payments</span>
+            Finance
+        </a>
     </nav>
 
 </div>
