@@ -163,6 +163,17 @@ $initials = strtoupper(mb_substr($teacher['first_name'] ?? 'T', 0, 1) . mb_subst
         .chart-bar { flex: 1; background: #BFDBFE; border-radius: 2px 2px 0 0; }
         .chart-bar.active { background: #3B82F6; }
 
+        .mc-class-list { margin-top: 16px; display: flex; flex-direction: column; gap: 8px; position: relative; z-index: 2; }
+        .mc-class-item { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 10px 12px; background: rgba(255,255,255,0.8); border-radius: 10px; 
+            border: 1px solid #E5E7EB; border-left: 4px solid #3B82F6;
+            backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+        }
+        .mc-class-info h5 { font-size: 13px; font-weight: 700; color: #111827; margin-bottom: 2px; }
+        .mc-class-info p { font-size: 11px; color: #6B7280; }
+        .mc-class-time { font-size: 11px; font-weight: 700; color: #1D4ED8; background: #EFF6FF; padding: 4px 8px; border-radius: 6px; }
+
         /* ── Small Stats Grid ── */
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 0 20px 20px; }
         .stat-card {
@@ -289,19 +300,29 @@ $initials = strtoupper(mb_substr($teacher['first_name'] ?? 'T', 0, 1) . mb_subst
                 <span class="material-symbols-rounded" style="font-size:20px;">school</span>
             </div>
         </div>
-        <div class="mc-value"><?= $total_classes ?></div>
-        <div class="mc-trend">
-            <span class="material-symbols-rounded">trending_up</span> +<?= count($schedules) > 0 ? '100' : '0' ?>% from yesterday
-        </div>
+        <div class="mc-value"><?= $total_classes ?> <span style="font-size:14px; color:#6B7280; font-weight:600;">คาบ</span></div>
         
-        <div class="mc-chart">
-            <!-- Mock Bar Chart matching the image -->
-            <div class="chart-bar" style="height: 30%;"></div>
-            <div class="chart-bar" style="height: 40%;"></div>
-            <div class="chart-bar" style="height: 35%;"></div>
-            <div class="chart-bar" style="height: 60%;"></div>
-            <div class="chart-bar" style="height: 55%;"></div>
-            <div class="chart-bar active" style="height: 80%;"></div>
+        <div class="mc-class-list">
+            <?php if (empty($schedules)): ?>
+                <div style="font-size:12px; color:#6B7280;">ไม่มีสอนในวันนี้</div>
+            <?php else: ?>
+                <?php foreach(array_slice($schedules, 0, 3) as $sch): ?>
+                <div class="mc-class-item">
+                    <div class="mc-class-info">
+                        <h5><?= htmlspecialchars($sch['subject_code']) ?></h5>
+                        <p>ห้อง <?= htmlspecialchars($sch['room'] ?? '-') ?></p>
+                    </div>
+                    <div class="mc-class-time">
+                        <?= date('H:i', strtotime($sch['start_time'])) ?> - <?= date('H:i', strtotime($sch['end_time'])) ?>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+                <?php if(count($schedules) > 3): ?>
+                    <div style="font-size:11px; color:#2563EB; font-weight:600; text-align:center; padding-top:4px;">
+                        + อีก <?= count($schedules) - 3 ?> คาบ (ดูด้านล่าง)
+                    </div>
+                <?php endif; ?>
+            <?php endif; ?>
         </div>
     </div>
 
