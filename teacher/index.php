@@ -3,7 +3,7 @@ require_once __DIR__ . '/../config/db.php';
 
 // Helper functions
 function getAvatarColor($name) {
-    $colors = ['#6366F1','#8B5CF6','#EC4899','#10B981','#F59E0B','#06B6D4','#EF4444','#3B82F6'];
+    $colors = ['#2563EB','#3B82F6','#EC4899','#10B981','#F59E0B','#06B6D4','#EF4444','#4F46E5'];
     if (empty($name)) return $colors[0];
     $idx = ctype_alpha($name[0]) ? ord(strtoupper($name[0])) % count($colors) : 0;
     return $colors[$idx];
@@ -91,9 +91,9 @@ $teacher_name = htmlspecialchars(($teacher['first_name'] ?? '') . ' ' . ($teache
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         
         :root {
-            --primary: #6366F1;
-            --primary-dark: #4F46E5;
-            --primary-light: #EEF2FF;
+            --primary: #2563EB;
+            --primary-dark: #1D4ED8;
+            --primary-light: #EFF6FF;
             --surface: #FFFFFF;
             --bg: #F1F5F9;
             --text: #0F172A;
@@ -166,13 +166,13 @@ $teacher_name = htmlspecialchars(($teacher['first_name'] ?? '') . ' ' . ($teache
         /* ── Hero Card ── */
         .hero-card {
             margin: 12px 20px 20px;
-            background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #A78BFA 100%);
+            background: linear-gradient(135deg, #1D4ED8 0%, #2563EB 50%, #3B82F6 100%);
             border-radius: 24px;
             padding: 24px;
             color: white;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 8px 30px rgba(37, 99, 235, 0.3);
         }
         .hero-card::before {
             content: '';
@@ -287,7 +287,7 @@ $teacher_name = htmlspecialchars(($teacher['first_name'] ?? '') . ' ' . ($teache
             content: '';
             position: absolute; top: 0; left: 0; right: 0;
             height: 3px;
-            background: linear-gradient(90deg, #6366F1, #8B5CF6, #A78BFA);
+            background: linear-gradient(90deg, #1D4ED8, #2563EB, #3B82F6);
         }
         .schedule-card.is-completed { opacity: 0.65; }
         .schedule-card.is-missed { border-left: 4px solid var(--danger); }
@@ -308,7 +308,7 @@ $teacher_name = htmlspecialchars(($teacher['first_name'] ?? '') . ' ' . ($teache
             display: inline-flex; align-items: center; gap: 4px;
         }
         .sched-badge .material-symbols-rounded { font-size: 14px; }
-        .badge-active { background: var(--primary-light); color: var(--primary); animation: softPulse 2s infinite; }
+        .badge-active { background: #DBEAFE; color: var(--primary); animation: softPulse 2s infinite; }
         .badge-done { background: var(--success-bg); color: var(--success); }
         .badge-missed { background: var(--danger-bg); color: var(--danger); }
         .badge-waiting { background: #F1F5F9; color: var(--text-secondary); }
@@ -340,7 +340,7 @@ $teacher_name = htmlspecialchars(($teacher['first_name'] ?? '') . ' ' . ($teache
         }
         .sched-btn-primary {
             background: var(--primary); color: white;
-            box-shadow: 0 2px 8px rgba(99,102,241,0.3);
+            box-shadow: 0 2px 8px rgba(37,99,235,0.3);
         }
         .sched-btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
         .sched-btn-disabled {
@@ -426,7 +426,7 @@ $teacher_name = htmlspecialchars(($teacher['first_name'] ?? '') . ' ' . ($teache
             </div>
             <div class="top-bar-actions">
                 <a href="schedule.php" class="icon-btn" title="ตารางสอน">
-                    <span class="material-symbols-rounded">calendar_month</span>
+                    <span class="material-symbols-rounded" style="color:#2563EB;">calendar_month</span>
                 </a>
                 <a href="../logout.php" class="icon-btn" title="ออกจากระบบ" style="color: var(--danger);">
                     <span class="material-symbols-rounded">logout</span>
@@ -460,7 +460,7 @@ $teacher_name = htmlspecialchars(($teacher['first_name'] ?? '') . ' ' . ($teache
         <div class="section-title anim-3">เมนูหลัก</div>
         <div class="quick-grid anim-3">
             <a href="schedule.php" class="quick-item">
-                <div class="quick-icon" style="background: #EEF2FF; color: #6366F1;">
+                <div class="quick-icon" style="background: #DBEAFE; color: #2563EB;">
                     <span class="material-symbols-rounded">calendar_month</span>
                 </div>
                 <span class="quick-label">ตารางสอน</span>
@@ -502,7 +502,7 @@ $teacher_name = htmlspecialchars(($teacher['first_name'] ?? '') . ' ' . ($teache
                 <span class="quick-label">ให้คะแนน</span>
             </a>
             <a href="profile.php" class="quick-item">
-                <div class="quick-icon" style="background: #F5F3FF; color: #8B5CF6;">
+                <div class="quick-icon" style="background: #DBEAFE; color: #2563EB;">
                     <span class="material-symbols-rounded">person</span>
                 </div>
                 <span class="quick-label">โปรไฟล์</span>
