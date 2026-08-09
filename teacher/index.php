@@ -248,50 +248,6 @@ $initials = strtoupper(mb_substr($teacher['first_name'] ?? 'T', 0, 1) . mb_subst
             border-radius: 12px; border: 1px dashed #D1D5DB;
         }
         .empty h4 { font-size: 14px; color: #6B7280; font-weight: 600; }
-
-        /* ── Bottom Nav ── */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 480px;
-            background-color: #fff;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 10px 12px max(env(safe-area-inset-bottom), 12px);
-            border-top: 1px solid #E5E7EB;
-            z-index: 100;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            color: #6B7280;
-            text-decoration: none;
-            font-size: 11px;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            padding: 8px 16px;
-            border-radius: 16px;
-        }
-
-        .nav-item .material-symbols-rounded {
-            font-size: 24px;
-        }
-
-        .nav-item.active {
-            color: #2563EB;
-            background-color: #EFF6FF;
-        }
-
-        .nav-item:hover:not(.active) {
-            color: #2563EB;
-        }
     </style>
 </head>
 <body>

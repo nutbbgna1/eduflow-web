@@ -1,6 +1,53 @@
 <?php
 $currentPage = basename($_SERVER['PHP_SELF']);
 ?>
+<style>
+    /* ── Global Bottom Nav for Teacher ── */
+    .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        max-width: 480px;
+        background-color: #fff;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding: 10px 12px max(env(safe-area-inset-bottom), 12px);
+        border-top: 1px solid #E5E7EB;
+        z-index: 9999;
+    }
+
+    .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        color: #6B7280;
+        text-decoration: none;
+        font-size: 11px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        padding: 8px 16px;
+        border-radius: 16px;
+        font-family: 'Inter', 'Noto Sans Thai', sans-serif;
+    }
+
+    .nav-item .material-symbols-rounded {
+        font-size: 24px;
+    }
+
+    .nav-item.active {
+        color: #2563EB;
+        background-color: #EFF6FF;
+    }
+
+    .nav-item:hover:not(.active) {
+        color: #2563EB;
+    }
+</style>
+
 <!-- Bottom Nav -->
 <nav class="bottom-nav">
     <a href="index.php" class="nav-item <?php echo ($currentPage == 'index.php') ? 'active' : ''; ?>">
