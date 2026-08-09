@@ -12,7 +12,8 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 10px 12px max(env(safe-area-inset-bottom), 12px);
+    padding: 10px 12px 12px; /* Fallback */
+    padding-bottom: calc(12px + env(safe-area-inset-bottom)); /* Safe area for iOS */
     border-top: 1px solid #E5E7EB;
     z-index: 9999;
 }
@@ -54,4 +55,14 @@
 .bottom-nav-spacer {
     height: 90px;
     width: 100%;
+}
+
+/* Hide bottom navigation on Desktop */
+@media (min-width: 769px) {
+    .bottom-nav {
+        display: none !important;
+    }
+    .bottom-nav-spacer {
+        display: none !important;
+    }
 }
