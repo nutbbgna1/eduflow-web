@@ -370,7 +370,10 @@ if (!isset($current_user_id)) {
                     <h2 class="font-bold text-lg">รายการข้อสอบ</h2>
                     <div style="display:flex;gap:8px;">
                         <a href="../assets/downloads/answer_sheet_template.pdf" target="_blank" class="btn btn-outline" style="padding:8px 12px; font-size:13px; text-decoration:none; display:flex; align-items:center; gap:4px;">
-                            <span class="material-symbols-rounded" style="font-size:16px;">print</span> โหลดใบคำตอบ
+                            <span class="material-symbols-rounded" style="font-size:16px;">print</span> (1/หน้า)
+                        </a>
+                        <a href="../assets/downloads/answer_sheet_template_2_per_page.pdf" target="_blank" class="btn btn-outline" style="padding:8px 12px; font-size:13px; text-decoration:none; display:flex; align-items:center; gap:4px;">
+                            <span class="material-symbols-rounded" style="font-size:16px;">print</span> (2/หน้า)
                         </a>
                         <button class="btn btn-primary" style="padding:8px 12px; font-size:13px;" onclick="showCreateExamModal()">
                             <span class="material-symbols-rounded" style="font-size:16px;">add</span> สร้าง

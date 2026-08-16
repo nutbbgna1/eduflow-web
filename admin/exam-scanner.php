@@ -591,9 +591,14 @@ exam_auto_migrate($pdo);
                     <h1 class="page-title" style="font-size:28px;">ตรวจข้อสอบ</h1>
                     <p style="font-size:14px;color:var(--text-secondary);margin-top:4px;">สร้างข้อสอบ กรอกเฉลย สแกนกระดาษคำตอบ ตรวจอัตโนมัติ</p>
                 </div>
-                <a href="../assets/downloads/answer_sheet_template.pdf" target="_blank" class="btn btn-outline" style="text-decoration:none;">
-                    <span class="material-symbols-rounded">print</span> โหลดใบคำตอบ (PDF)
-                </a>
+                <div style="display:flex; gap:8px;">
+                    <a href="../assets/downloads/answer_sheet_template.pdf" target="_blank" class="btn btn-outline" style="text-decoration:none;">
+                        <span class="material-symbols-rounded">print</span> ใบคำตอบ (1 แผ่น/หน้า)
+                    </a>
+                    <a href="../assets/downloads/answer_sheet_template_2_per_page.pdf" target="_blank" class="btn btn-outline" style="text-decoration:none;">
+                        <span class="material-symbols-rounded">print</span> ใบคำตอบ (2 แผ่น/หน้า)
+                    </a>
+                </div>
             </div>
 
             <!-- OpenCV Loading Bar -->
