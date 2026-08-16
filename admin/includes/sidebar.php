@@ -14,6 +14,7 @@ $navItems = [
     ['icon' => 'payments', 'label' => __('Payments'), 'url' => 'finance.php'],
     ['icon' => 'account_balance_wallet', 'label' => __('Payroll'), 'url' => 'payroll.php'],
     ['icon' => 'event_busy', 'label' => __('Leave'), 'url' => 'leave.php'],
+    ['icon' => 'document_scanner', 'label' => __('Exam Scanner'), 'url' => 'exam-scanner.php'],
     ['icon' => 'badge', 'label' => __('RFID'), 'url' => '#'],
 ];
 ?>

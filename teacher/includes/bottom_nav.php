@@ -20,6 +20,10 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         <span class="material-symbols-rounded">school</span>
         <span class="nav-label">Students</span>
     </a>
+    <a href="exam-scanner.php" class="nav-item <?php echo ($currentPage == 'exam-scanner.php') ? 'active' : ''; ?>">
+        <span class="material-symbols-rounded">document_scanner</span>
+        <span class="nav-label">Exam</span>
+    </a>
     <a href="leave.php" class="nav-item <?php echo ($currentPage == 'leave.php') ? 'active' : ''; ?>">
         <span class="material-symbols-rounded">badge</span>
         <span class="nav-label">Staff</span>
